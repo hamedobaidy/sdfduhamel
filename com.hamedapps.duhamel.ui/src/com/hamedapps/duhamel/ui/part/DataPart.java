@@ -301,4 +301,13 @@ public class DataPart {
 	public void setDuhamel(Duhamel duhamel) {
 		this.duhamel = duhamel;
 	}
+
+	/**
+	 * 
+	 */
+	public void updateDuhamel() {
+		updateXi();
+		updateK();
+		updateM();
+	}
 }
