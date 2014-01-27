@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="ASCII"?>
+<application:Application xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_DcW3cIaUEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.application">
+  <children xsi:type="basic:TrimmedWindow" xmi:id="_N0PRQIaUEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.trimmedwindow.0" label="Duhamel Integral Numeric Evaluation" tooltip="Duhamel Integral Numeric Evaluation" x="100" y="100" width="800" height="600">
+    <children xsi:type="advanced:PerspectiveStack" xmi:id="__Ssd8IaUEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.perspectivestack.0">
+      <children xsi:type="advanced:Perspective" xmi:id="__og88IaUEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.perspective.0" label="Main">
+        <children xsi:type="basic:PartSashContainer" xmi:id="_Bvw9UIaVEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.partsashcontainer.0" horizontal="true">
+          <children xsi:type="basic:PartStack" xmi:id="_GI1PUIaVEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.partstack.0" containerData="200">
+            <children xsi:type="basic:Part" xmi:id="_Gu2GcIaVEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.part.datapart" containerData="150" contributionURI="bundleclass://com.hamedapps.duhamel.ui/com.hamedapps.duhamel.ui.part.DataPart" label="Input Data" tooltip="Input Data"/>
+          </children>
+          <children xsi:type="basic:PartStack" xmi:id="_YYCxwIaVEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.partstack.1" containerData="600">
+            <children xsi:type="basic:Part" xmi:id="_ZCPlUIaVEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.part.responsedata" contributionURI="bundleclass://com.hamedapps.duhamel.ui/com.hamedapps.duhamel.ui.part.ResponseDataPart" label="Response Data" tooltip="Response Data"/>
+            <children xsi:type="basic:Part" xmi:id="_stRRkIatEeOybKxRtIKcrA" elementId="com.hamedapps.duhamel.ui.part.inputchartpart" contributionURI="bundleclass://com.hamedapps.duhamel.ui/com.hamedapps.duhamel.ui.part.InputChartPart" label="Input Force Chart"/>
+            <children xsi:type="basic:Part" xmi:id="_sNkKsIaVEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.part.displacementchartpart" contributionURI="bundleclass://com.hamedapps.duhamel.ui/com.hamedapps.duhamel.ui.part.DisplacementChartPart" label="Displacement Chart" tooltip="Displacement Chart"/>
+            <children xsi:type="basic:Part" xmi:id="_7WG3IIaVEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.part.velocitychartpart" contributionURI="bundleclass://com.hamedapps.duhamel.ui/com.hamedapps.duhamel.ui.part.VelocityChartPart" label="Velocity Chart" tooltip="Velocity Chart"/>
+            <children xsi:type="basic:Part" xmi:id="_C6aWEIaWEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.part.accelerationchartpart" contributionURI="bundleclass://com.hamedapps.duhamel.ui/com.hamedapps.duhamel.ui.part.AccelerationChartPart" label="Acceleration Chart" tooltip="Acceleration Chart"/>
+          </children>
+        </children>
+      </children>
+    </children>
+    <mainMenu xmi:id="_3JTJYIaeEeOj3uMHkZ9CbQ" elementId="org.eclipse.ui.main.menu">
+      <children xsi:type="menu:Menu" xmi:id="_6axhMIaeEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.menu.file" label="&amp;File">
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_SgPFUIafEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.handledmenuitem.exit" command="_-a684IaeEeOj3uMHkZ9CbQ"/>
+      </children>
+      <children xsi:type="menu:Menu" xmi:id="_p1xBUIafEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.menu.0" label="&amp;Tools">
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_r9N2AIafEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.handledmenuitem.compute" command="_WXC-0IafEeOj3uMHkZ9CbQ"/>
+      </children>
+      <children xsi:type="menu:Menu" xmi:id="_wqnZQIafEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.menu.help" label="&amp;Help">
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_zeICsIafEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.handledmenuitem.0" command="_1MmWsIafEeOj3uMHkZ9CbQ"/>
+      </children>
+    </mainMenu>
+    <trimBars xmi:id="_E5iJoIagEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.trimbar.0">
+      <children xsi:type="menu:ToolBar" xmi:id="_Hovh4IagEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.toolbar.0">
+        <children xsi:type="menu:HandledToolItem" xmi:id="_IXPmoIagEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.handledtoolitem.0" label="Compute" command="_WXC-0IafEeOj3uMHkZ9CbQ"/>
+      </children>
+    </trimBars>
+  </children>
+  <handlers xmi:id="_CuzM4IafEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.handler.exit" contributionURI="bundleclass://com.hamedapps.duhamel.ui/com.hamedapps.duhamel.ui.handler.ExitHandler" command="_-a684IaeEeOj3uMHkZ9CbQ"/>
+  <handlers xmi:id="_Zd2-wIafEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.handler.compute" contributionURI="bundleclass://com.hamedapps.duhamel.ui/com.hamedapps.duhamel.ui.handler.ComputeHandler" command="_WXC-0IafEeOj3uMHkZ9CbQ"/>
+  <handlers xmi:id="_4_NssIafEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.handler.helpabout" contributionURI="bundleclass://com.hamedapps.duhamel.ui/com.hamedapps.duhamel.ui.handler.AboutHandler" command="_1MmWsIafEeOj3uMHkZ9CbQ"/>
+  <commands xmi:id="_-a684IaeEeOj3uMHkZ9CbQ" elementId="org.eclipse.ui.file.exit" commandName="Exit"/>
+  <commands xmi:id="_WXC-0IafEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.command.compute" commandName="Compute"/>
+  <commands xmi:id="_1MmWsIafEeOj3uMHkZ9CbQ" elementId="org.eclipse.ui.help.aboutAction" commandName="About"/>
+  <addons xmi:id="_DcW3cYaUEeOj3uMHkZ9CbQ" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
+  <addons xmi:id="_DcXegIaUEeOj3uMHkZ9CbQ" elementId="org.eclipse.e4.ui.contexts.service" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
+  <addons xmi:id="_DcXegYaUEeOj3uMHkZ9CbQ" elementId="org.eclipse.e4.ui.bindings.service" contributionURI="bundleclass://org.eclipse.e4.ui.bindings/org.eclipse.e4.ui.bindings.BindingServiceAddon"/>
+  <addons xmi:id="_DcXegoaUEeOj3uMHkZ9CbQ" elementId="org.eclipse.e4.ui.workbench.commands.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.CommandProcessingAddon"/>
+  <addons xmi:id="_DcXeg4aUEeOj3uMHkZ9CbQ" elementId="org.eclipse.e4.ui.workbench.contexts.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.ContextProcessingAddon"/>
+  <addons xmi:id="_DcXehIaUEeOj3uMHkZ9CbQ" elementId="org.eclipse.e4.ui.workbench.bindings.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.swt/org.eclipse.e4.ui.workbench.swt.util.BindingProcessingAddon"/>
+  <addons xmi:id="_DcXehYaUEeOj3uMHkZ9CbQ" elementId="org.eclipse.e4.ui.workbench.handler.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.HandlerProcessingAddon"/>
+</application:Application>

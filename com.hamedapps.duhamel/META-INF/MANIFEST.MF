@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Duhamel
+Bundle-SymbolicName: com.hamedapps.duhamel
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: HAMEDAPPS
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Export-Package: com.hamedapps.duhamel
