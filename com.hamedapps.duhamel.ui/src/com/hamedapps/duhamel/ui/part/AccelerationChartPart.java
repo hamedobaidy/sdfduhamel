@@ -1,14 +1,13 @@
  
 package com.hamedapps.duhamel.ui.part;
 
-import javax.inject.Inject;
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.widgets.Composite;
 import org.swtchart.Chart;
 
 public class AccelerationChartPart {
@@ -37,7 +36,7 @@ public class AccelerationChartPart {
 	 * 
 	 */
 	public void updateChart() {
-		MessageDialog.openInformation(chart.getShell(), "Done", "Acceleration Chart will be updated soon");
+		
 	}
 	
 	

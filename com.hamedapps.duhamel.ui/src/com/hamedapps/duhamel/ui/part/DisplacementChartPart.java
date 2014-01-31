@@ -1,18 +1,29 @@
  
 package com.hamedapps.duhamel.ui.part;
 
-import javax.inject.Inject;
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.widgets.Composite;
 import org.swtchart.Chart;
+import org.swtchart.IAxisSet;
+import org.swtchart.ILineSeries;
+import org.swtchart.ILineSeries.PlotSymbolType;
+import org.swtchart.ISeries.SeriesType;
+import org.swtchart.ISeriesSet;
+
+import com.hamedapps.duhamel.Duhamel;
 
 public class DisplacementChartPart {
 	private Chart chart;
+	private Duhamel duhamel;
+	
+	@Inject
+	private IEclipseContext context;
 
 	@Inject
 	public DisplacementChartPart() {
@@ -30,14 +41,40 @@ public class DisplacementChartPart {
 		chart = new Chart(scrolledComposite, SWT.NONE);
 		scrolledComposite.setContent(chart);
 		scrolledComposite.setMinSize(chart.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-		//TODO Your code here
+		chart.getTitle().setText("Displacement Chart");
+		
+		updateChart();
+	}
+
+	/**
+	 * 
+	 */
+	private void refreshChart() {
+		double[] ts = new double[duhamel.getResponses().size()];
+		double[] us =  new double[duhamel.getResponses().size()];
+		for(int i =0; i < ts.length; i++) {
+			ts[i]=duhamel.getResponses().get(i).getT();
+			us[i]=duhamel.getResponses().get(i).getU();
+		}
+		
+		ISeriesSet seriesSet = chart.getSeriesSet();
+		ILineSeries series = (ILineSeries) seriesSet.createSeries(SeriesType.LINE, "Displacement");
+		series.setYSeries(us);
+		series.setXSeries(ts);
+		IAxisSet axisSet = chart.getAxisSet();
+		axisSet.getXAxis(0).getTitle().setText("t (sec)");
+		axisSet.getYAxis(0).getTitle().setText("u");
+		series.setSymbolType(PlotSymbolType.NONE);
+		axisSet.adjustRange();
 	}
 
 	/**
 	 * 
 	 */
 	public void updateChart() {
-		MessageDialog.openInformation(chart.getShell(), "Done", "Displacement Chart updated");
+		duhamel = (Duhamel) context.get("duhamel");
+		if(duhamel!=null) 
+			refreshChart();
 	}
 	
 	

@@ -53,6 +53,8 @@ public class DataPart {
 	private double m = 0.0;
 	private double omega = 0.0;
 	private double omega_D = 0.0;
+	private Text textDt;
+	private double dt;
 	
 	@Inject
 	public DataPart() {
@@ -64,8 +66,8 @@ public class DataPart {
 	public void postConstruct(Composite parent) {
 		parent.setLayout(new GridLayout(2, false));
 		
-		// Test
-		application.getContext().set("inputForces", inputForces);
+//		// Test
+//		application.getContext().set("inputForces", inputForces);
 		application.getContext().set("duhamel", duhamel);
 		
 		Label lblXi = new Label(parent, SWT.NONE);
@@ -121,6 +123,20 @@ public class DataPart {
 			}
 		});
 		textM.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblTimeStepdt = new Label(parent, SWT.NONE);
+		lblTimeStepdt.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblTimeStepdt.setText("Time Step (dt) : ");
+		
+		textDt = new Text(parent, SWT.BORDER);
+		textDt.setText("0.01");
+		textDt.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				updateDt();
+			}
+		});
+		textDt.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		Label label = new Label(parent, SWT.SEPARATOR | SWT.HORIZONTAL | SWT.SHADOW_NONE);
 		label.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
@@ -218,6 +234,18 @@ public class DataPart {
 	/**
 	 * 
 	 */
+	protected void updateDt() {
+		try {
+			dt = Double.parseDouble(textDt.getText());
+			duhamel.setDt(dt);
+		} catch (NumberFormatException nfex) {
+			MessageDialog.openInformation(textDt.getShell(), "Error", "Enter valid number");
+		}
+	}
+
+	/**
+	 * 
+	 */
 	private void updateM() {
 		try {
 			m = Double.parseDouble(textM.getText());
@@ -278,6 +306,7 @@ public class DataPart {
 		inputForces.add(inf);
 		tableViewer.refresh();
 		textTime.setFocus();
+		duhamel.setInputForces(inputForces);
 	}
 
 	public Vector<InputForce> getInputForces() {
@@ -309,5 +338,6 @@ public class DataPart {
 		updateXi();
 		updateK();
 		updateM();
+		updateDt();
 	}
 }

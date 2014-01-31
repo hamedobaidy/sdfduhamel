@@ -11,12 +11,14 @@ import java.util.Vector;
  */
 public class Duhamel {
 	private Vector<InputForce> inputForces;
+	private Vector<InputForce> forces;
 	private Vector<Response> responses;
 	
 	private double kesi;
 	private double m;
 	private double omega;
 	private double omega_D;
+	private double dt;
 	
 	public Duhamel( Vector<InputForce> inputForces, double kesi, double m, double omega, double omega_D) {
 		responses = new Vector<>();
@@ -25,9 +27,12 @@ public class Duhamel {
 		this.m = m;
 		this.omega = omega;
 		this.omega_D = omega_D;
+		
+		forces = new Vector<>();
 	}
 	
 	public void compute() {
+		responses.clear();
 		
 		double i1_ti_1 = 0;
 		double i2_ti_1 = 0;
@@ -38,7 +43,9 @@ public class Duhamel {
 		double pti_1 = 0;
 		double ti_1 = 0;
 		
-		for (InputForce inputForce : inputForces) {
+		computeForces();
+		
+		for (InputForce inputForce : forces) {
 			double ti = inputForce.getT();
 			double pi = inputForce.getP();
 			
@@ -97,6 +104,34 @@ public class Duhamel {
 			bD_ti_1 = bD;
 			pti_1 = pi;
 			ti_1 = ti;
+		}
+	}
+
+	/**
+	 * 
+	 */
+	private void computeForces() {
+		forces.clear();
+		double t = 0;
+		for (int i = 0; i < inputForces.size() -1; i++) {
+			InputForce force = inputForces.get(i);
+			
+			int n = 0;
+			if(i == inputForces.size()-2) {
+				n = 10000;
+				for(int j = 1; j < n; j++) {
+					t = force.getT() + j * dt;
+					InputForce in = new InputForce(t, 0);
+					forces.add(in);
+				}
+			} else {
+				n = (int) ((inputForces.get(i+1).getT() - force.getT())/dt);
+				for(int j = 1; j < n; j++) {
+					t = force.getT() + j * dt;
+					InputForce in = new InputForce(t, force.getP());
+					forces.add(in);
+				}
+			}
 		}
 	}
 
@@ -176,5 +211,19 @@ public class Duhamel {
 
 	public void setResponses(Vector<Response> responses) {
 		this.responses = responses;
+	}
+
+	/**
+	 * @return the dt
+	 */
+	public double getDt() {
+		return dt;
+	}
+
+	/**
+	 * @param dt the dt to set
+	 */
+	public void setDt(double dt) {
+		this.dt = dt;
 	}
 }

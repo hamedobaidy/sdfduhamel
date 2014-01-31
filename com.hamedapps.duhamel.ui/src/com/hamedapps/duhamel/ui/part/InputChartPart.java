@@ -1,18 +1,28 @@
  
 package com.hamedapps.duhamel.ui.part;
 
-import javax.inject.Inject;
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.widgets.Composite;
 import org.swtchart.Chart;
+import org.swtchart.IAxisSet;
+import org.swtchart.ILineSeries;
+import org.swtchart.ILineSeries.PlotSymbolType;
+import org.swtchart.ISeries.SeriesType;
+import org.swtchart.ISeriesSet;
+
+import com.hamedapps.duhamel.Duhamel;
 
 public class InputChartPart {
 	private Chart chart;
+	private Duhamel duhamel;
+	@Inject
+	private IEclipseContext context;
 
 	@Inject
 	public InputChartPart() {
@@ -30,14 +40,37 @@ public class InputChartPart {
 		chart = new Chart(scrolledComposite, SWT.NONE);
 		scrolledComposite.setContent(chart);
 		scrolledComposite.setMinSize(chart.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-		//TODO Your code here
+		updateChart();
 	}
 
 	/**
 	 * 
 	 */
 	public void updateChart() {
-		MessageDialog.openInformation(chart.getShell(), "Done", "Chart will be updated soon");
+		duhamel = (Duhamel) context.get("duhamel");
+		if(duhamel!=null) 
+			refreshChart();
+	}
+
+	/**
+	 * 
+	 */
+	private void refreshChart() {
+		double[] ts = new double[duhamel.getInputForces().size()];
+		double[] fs = new double[duhamel.getInputForces().size()];
+		
+		for(int i = 0; i < ts.length; i++ ) {
+			ts[i] = duhamel.getInputForces().get(i).getT();
+			fs[i] = duhamel.getInputForces().get(i).getP();
+		}
+		
+		ISeriesSet seriesSet = chart.getSeriesSet();
+		ILineSeries series = (ILineSeries) seriesSet.createSeries(SeriesType.LINE, "Displacement");
+		series.setYSeries(fs);
+		series.setXSeries(ts);
+		IAxisSet axisSet = chart.getAxisSet();
+		series.setSymbolType(PlotSymbolType.NONE);
+		axisSet.adjustRange();
 	}
 	
 	

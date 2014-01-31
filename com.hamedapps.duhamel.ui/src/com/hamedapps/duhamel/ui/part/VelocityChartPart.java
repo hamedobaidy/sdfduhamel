@@ -37,7 +37,7 @@ public class VelocityChartPart {
 	 * 
 	 */
 	public void updateChart() {
-		MessageDialog.openInformation(chart.getShell(), "Done", "Velocity Chart will be updated soon");
+//		MessageDialog.openInformation(chart.getShell(), "Done", "Velocity Chart will be updated soon");
 	}
 	
 	
