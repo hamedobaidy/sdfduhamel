@@ -1,18 +1,28 @@
  
 package com.hamedapps.duhamel.ui.part;
 
-import javax.inject.Inject;
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.widgets.Composite;
 import org.swtchart.Chart;
+import org.swtchart.IAxisSet;
+import org.swtchart.ILineSeries;
+import org.swtchart.ILineSeries.PlotSymbolType;
+import org.swtchart.ISeries.SeriesType;
+import org.swtchart.ISeriesSet;
+
+import com.hamedapps.duhamel.Duhamel;
 
 public class VelocityChartPart {
 	private Chart chart;
+	private Duhamel duhamel;
+	@Inject
+	private IEclipseContext context;
 
 	@Inject
 	public VelocityChartPart() {
@@ -36,8 +46,32 @@ public class VelocityChartPart {
 	/**
 	 * 
 	 */
+	private void refreshChart() {
+		double[] ts = new double[duhamel.getResponses().size()];
+		double[] vs =  new double[duhamel.getResponses().size()];
+		for(int i =0; i < ts.length; i++) {
+			ts[i]=duhamel.getResponses().get(i).getT();
+			vs[i]=duhamel.getResponses().get(i).getV();
+		}
+		
+		ISeriesSet seriesSet = chart.getSeriesSet();
+		ILineSeries series = (ILineSeries) seriesSet.createSeries(SeriesType.LINE, "Velocity");
+		series.setYSeries(vs);
+		series.setXSeries(ts);
+		IAxisSet axisSet = chart.getAxisSet();
+		axisSet.getXAxis(0).getTitle().setText("t (sec)");
+		axisSet.getYAxis(0).getTitle().setText("v");
+		series.setSymbolType(PlotSymbolType.NONE);
+		axisSet.adjustRange();
+	}
+
+	/**
+	 * 
+	 */
 	public void updateChart() {
-//		MessageDialog.openInformation(chart.getShell(), "Done", "Velocity Chart will be updated soon");
+		duhamel = (Duhamel) context.get("duhamel");
+		if(duhamel!=null) 
+			refreshChart();
 	}
 	
 	

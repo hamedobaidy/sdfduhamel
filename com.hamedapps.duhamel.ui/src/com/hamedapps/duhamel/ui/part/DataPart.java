@@ -302,10 +302,12 @@ public class DataPart {
 	private void addTimeForce() {
 		double t = Double.parseDouble(textTime.getText());
 		double p = Double.parseDouble(textForce.getText());
+		double dt = Double.parseDouble(textDt.getText());
 		InputForce inf = new InputForce(t, p);
 		inputForces.add(inf);
 		tableViewer.refresh();
-		textTime.setFocus();
+		textTime.setText(Double.toString(t+dt));
+		textForce.setFocus();
 		duhamel.setInputForces(inputForces);
 	}
 

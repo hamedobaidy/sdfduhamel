@@ -33,78 +33,139 @@ public class Duhamel {
 	
 	public void compute() {
 		responses.clear();
+			
+		// Compute A(t_0) and B(t_0) assuming A(t_-1)=B(t_-1)=0
+		double a_ti_1 = 0;
+		double b_ti_1 = 0;
 		
-		double i1_ti_1 = 0;
-		double i2_ti_1 = 0;
-		double i3_ti_1 = 0;
-		double i4_ti_1 = 0;
-		double aD_ti_1 = 0;
-		double bD_ti_1 = 0;
-		double pti_1 = 0;
-		double ti_1 = 0;
-		
-		computeForces();
-		
-		for (InputForce inputForce : forces) {
-			double ti = inputForce.getT();
-			double pi = inputForce.getP();
+		// While there is force record
+		//	Compute I_1 to I_4 for t_i
+		//	Compute A(t_i) and B(t_i)
+		//	Compute u(t_i)
+		//	Compute u'(t_i)
+		//	Compute u"(t_i)
+		for(int i = 1; i < inputForces.size(); i++) {
+			InputForce if_i = inputForces.get(i);
+			InputForce if_i_1 = inputForces.get(i-1);
+			double ti = if_i.getT();
+			double ti_1 = if_i_1.getT();
+			double pi = if_i.getP();
+			double pi_1 = if_i_1.getP();
+			double i1 = computeI1limit(ti)-computeI1limit(ti_1);
+			double i2 = computeI2limit(ti)- computeI2limit(ti_1);
+			double i3 =computeI3limit(ti, i1, i2);
+			double i4 = computeI4limit(ti, i1, i2)-computeI4limit(ti_1, i1, i2);
+			double at = a_ti_1 + (pi_1 - ti_1 * ((pi-pi_1)/(ti-ti_1)))*i2+ ((pi-pi_1)/(ti-ti_1))*i4;
+			double bt = b_ti_1 + (pi_1 - ti_1 * ((pi-pi_1)/(ti-ti_1)))*i2+ ((pi-pi_1)/(ti-ti_1))*i3;
 			
-			// Compute common factors
-			double const1 = Math.pow(kesi*omega, 2)+Math.pow(omega_D, 2);
-			double const2 = Math.pow(Math.E, kesi*omega*ti)/const1;
+			double c = Math.pow(Math.E, -kesi*omega*ti)/(m*omega_D);
+			double cp = -kesi*omega*c;
+			double cpp = -kesi*omega*cp;
+			double d = at * Math.sin(omega_D*ti)-bt*Math.cos(omega_D*ti);
+			double dp = omega_D*at*Math.cos(omega_D*ti)+omega_D*bt*Math.sin(omega_D*ti);
+			double dpp = -Math.pow(omega_D, 2)*at*Math.sin(omega_D*ti)+Math.pow(omega_D, 2)*bt*Math.cos(omega_D*ti);
 			
-			// Compue I1(ti)
-			double const4 = kesi*omega*Math.cos(omega_D*ti);
-			double const5 = omega_D*Math.sin(omega_D)*ti;
-			double i1_ti = const1 * (const4 + const5);
+			double u = c*d;
+			double v = cp*d+c*dp;
+			double a = cpp*d+2*cp*dp+c*dpp;
 			
-			// Compute I1
-			double i1 = i1_ti - i1_ti_1;
-			
-			//Compute I2(ti)
-			double const6 = kesi*omega*Math.sin(omega_D*ti);
-			double const7 = omega_D * Math.cos(omega_D*ti);
-			double i2_ti = const2 * (const6-const7);
-			
-			// Compute I2
-			double i2 = i2_ti - i2_ti_1;
-			
-			// Compute I3(ti)
-			double i3_ti = (ti - ((kesi*omega)/const1))*i2 + (omega_D/const1)*i1;
-			
-			// Compute I3
-			double i3 = i3_ti - i3_ti_1;
-			
-			// Compute I4(ti)
-			double i4_ti = (ti - ((kesi*omega)/const1))*i1 - (omega_D/const1)*i2;
-			
-			// Compute I4
-			double i4 = i4_ti - i4_ti_1;
-			
-			// Compute A_D(ti)
-			double dp_dt = (pi-pti_1)/(ti-ti_1);
-			double aD = aD_ti_1 + (pti_1 - ( ti_1 *  dp_dt))*i1 + dp_dt *i4;
-			
-			// Compute B_D(ti)
-			double bD = bD_ti_1 +(pti_1 - ti_1 * dp_dt) * i2 + dp_dt* i3;
-			
-			// Compute u(ti)
-			double m1 = Math.pow(Math.E, -kesi*omega*ti)/(m*omega_D);
-			double u_ti = m1*(aD*Math.sin(omega_D*ti)+bD * Math.cos(omega_D*ti));
-			
-			Response r = new Response(ti, u_ti);
-			r.setP(pi);
+			Response r = new Response(ti, pi, u, v, a);
 			responses.add(r);
 			
-			i1_ti_1 = i1_ti;
-			i2_ti_1 = i2_ti;
-			i3_ti_1 = i3_ti;
-			i4_ti_1 = i4_ti;
-			aD_ti_1 = aD;
-			bD_ti_1 = bD;
-			pti_1 = pi;
-			ti_1 = ti;
+			a_ti_1=at;
+			b_ti_1=bt;
 		}
+		
+		
+		// Set u(t_n)=u_0 and u'(t_n)=u'_0 for free vibration of the system after forced vibration, 
+		// where n is the last time force recorded
+		double u0 = responses.get(responses.size()-1).getU();
+		double v0 = responses.get(responses.size()-1).getV();
+		double tn = responses.get(responses.size()-1).getT();
+		
+		// Compute u, u', u" for free vibration until desired time
+		for(int i = 1; i < 100; i++) {
+			double t = tn + i *dt; 
+			double e = Math.pow(Math.E, -kesi*omega*t);
+			double ep = -kesi*omega*e;
+			double epp = -kesi*omega*ep;
+			double f = u0*Math.cos(omega_D*t)+ ((v0+kesi*omega*u0)/omega_D)*Math.sin(omega_D*t);
+			double fp = -u0*omega_D*Math.sin(omega_D*t)+((v0+kesi*omega*u0)/omega_D)*omega_D*Math.cos(omega_D*t);
+			double fpp = -u0*omega_D*omega_D*Math.cos(omega_D*t)-((v0+kesi*omega*u0)/omega_D)*omega_D*omega_D*Math.sin(omega_D*t);
+			
+			double u = e*f;
+			double v = ep*f+e*fp;
+			double a = epp*f+2*ep*fp+e*fpp;
+			Response r = new Response(t, 0.0, u, v, a);
+			responses.add(r);
+		}
+	}
+	/**
+	 * @param t_0
+	 * @param i1_i_1
+	 * @param i2_i_1
+	 * @return
+	 */
+	private double computeI4limit(double t, double i1, double i2) {
+		double c1 = computeCI3_4_1(t);
+		double c2 = computeCI3_4_2(t);
+		return c1*i1-c2*i2;
+	}
+
+	/**
+	 * @param t_0
+	 * @param i1_i_1
+	 * @param i2_i_1
+	 * @return
+	 */
+	private double computeI3limit(double t, double i1, double i2) {
+		double c1 = computeCI3_4_1(t);
+		double c2 = computeCI3_4_2(t);
+		
+		return c1*i2+c2*i1;
+	}
+
+	/**
+	 * @param t
+	 * @return
+	 */
+	private double computeCI3_4_2(double t) {
+		return omega_D/(Math.pow(kesi*omega, 2)+Math.pow(omega_D, 2));
+	}
+
+	/**
+	 * @param t
+	 * @return
+	 */
+	private double computeCI3_4_1(double t) {
+		return t-((kesi*omega)/(Math.pow(kesi*omega, 2)+Math.pow(omega_D, 2)));
+	}
+
+	/**
+	 * @param t_0
+	 * @return
+	 */
+	private double computeI2limit(double t) {
+		double c = computeMultiplier1(t);
+		return c*(kesi*omega*Math.sin(omega_D*t)-omega_D*Math.cos(omega_D*t));
+	}
+
+	/**
+	 * @param d
+	 * @return
+	 */
+	private double computeI1limit(double t) {
+		double c = computeMultiplier1(t);
+		
+		return c*(kesi*omega*Math.cos(omega_D*t)+omega_D*Math.sin(omega_D*t));
+	}
+
+	/**
+	 * @param t
+	 * @return
+	 */
+	private double computeMultiplier1(double t) {
+		return Math.pow(Math.E, kesi*omega*t)/(Math.pow(kesi*omega, 2)+Math.pow(omega_D, 2));
 	}
 
 	/**

@@ -4,14 +4,25 @@ package com.hamedapps.duhamel.ui.part;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
+import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.swtchart.Chart;
+import org.swtchart.IAxisSet;
+import org.swtchart.ILineSeries;
+import org.swtchart.ILineSeries.PlotSymbolType;
+import org.swtchart.ISeries.SeriesType;
+import org.swtchart.ISeriesSet;
+
+import com.hamedapps.duhamel.Duhamel;
 
 public class AccelerationChartPart {
 	private Chart chart;
+	private Duhamel duhamel;
+	@Inject
+	private IEclipseContext context;
 
 	@Inject
 	public AccelerationChartPart() {
@@ -35,8 +46,32 @@ public class AccelerationChartPart {
 	/**
 	 * 
 	 */
-	public void updateChart() {
+	private void refreshChart() {
+		double[] ts = new double[duhamel.getResponses().size()];
+		double[] as =  new double[duhamel.getResponses().size()];
+		for(int i =0; i < ts.length; i++) {
+			ts[i]=duhamel.getResponses().get(i).getT();
+			as[i]=duhamel.getResponses().get(i).getA();
+		}
 		
+		ISeriesSet seriesSet = chart.getSeriesSet();
+		ILineSeries series = (ILineSeries) seriesSet.createSeries(SeriesType.LINE, "Acceleration");
+		series.setYSeries(as);
+		series.setXSeries(ts);
+		IAxisSet axisSet = chart.getAxisSet();
+		axisSet.getXAxis(0).getTitle().setText("t (sec)");
+		axisSet.getYAxis(0).getTitle().setText("a");
+		series.setSymbolType(PlotSymbolType.NONE);
+		axisSet.adjustRange();
+	}
+
+	/**
+	 * 
+	 */
+	public void updateChart() {
+		duhamel = (Duhamel) context.get("duhamel");
+		if(duhamel!=null) 
+			refreshChart();
 	}
 	
 	
