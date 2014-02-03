@@ -282,6 +282,7 @@ public class DataPart {
 	private void updateK() {
 		try {
 			k = Double.parseDouble(textK.getText());
+			duhamel.setK(k);
 			updateOmega();
 		} catch (NumberFormatException nfex) {
 			MessageDialog.openError(textK.getShell(), "Error", "Enter valid number ");

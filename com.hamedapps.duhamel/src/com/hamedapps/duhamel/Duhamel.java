@@ -22,6 +22,7 @@ public class Duhamel {
 	private double omega_D;
 	private double dt;
 	private double tMax;
+	private double k;
 
 	public Duhamel(Vector<InputForce> inputForces, double kesi, double m,
 			double omega, double omega_D) {
@@ -389,5 +390,147 @@ public class Duhamel {
 	 */
 	public void settMax(double tMax) {
 		this.tMax = tMax;
+	}
+	
+	public void testCompute() {
+		
+		// TODO rewrite to follow compltely bargi procedure including interpolation and base acceleration consideration
+		
+		responses.clear();
+		
+		if(interpolate) 
+			computeForces();
+		else
+			forces = inputForces;
+		
+		if(forceIsGroundAcceleration)
+			computeForceFromGroundAcceleration();
+		
+		double xi = kesi;
+		
+		InputForce f0 = forces.get(0);
+		double fiM1 = f0.getP();
+		double tiM1 = f0.getT();
+		double ati = 0;
+		double bti = 0;
+		double dat = 0;
+		double dbt = 0;
+		double y = 0;
+		double v = 0;
+		double p = 0;
+		double yMax = 0.0;
+		double vMax = 0.0;
+		double aMax = 0.0;
+		double pMax = 0.0;
+		omega = Math.sqrt(k/m);
+		double crit = 2*Math.sqrt(k*m);
+		double c = xi* crit;
+		double wd = omega * Math.sqrt(1-Math.pow(xi, 2));
+		double xiwd = xi*omega;
+		double dwsq = Math.pow(xiwd, 2)+ Math.pow(xi, 2);
+		double acc = fiM1/m;
+		
+		Response r0 = new Response(tiM1, fiM1, y, v, acc);
+		responses.add(r0);
+		
+		for(int i = 1; i < forces.size(); i++ ) {
+			
+			// Solve for displacement
+			double fi = forces.get(i).getP();
+			double ti = forces.get(i).getT();
+			double dfti = fi - fiM1;
+			double dti = ti - tiM1;
+			double ft = dfti/dti;
+			double g = fiM1 -tiM1*ft;
+			double ai = int1(ti)-int1(tiM1);
+			double bi = int2(ti)-int2(tiM1);
+			double vs = int3(ti)-int3(tiM1);
+			double vc = int4(ti)-int4(tiM1);
+			ai = ai*g;
+			bi = bi*g;
+			bi = bi + ft*vs;
+			ai = ai + ft*vc;
+			ati = ati+ai;
+			bti = bti + bi;
+			y = Math.exp(-xiwd*ti)*(ati*Math.sin(wd*ti)-bti*Math.cos(wd*ti))/(m*wd);
+			
+			// Solve for velocity
+			double da = (wd*bti-xiwd*ati)*Math.sin(wd*ti);
+			double db = (wd*ati+xiwd*bti)*Math.cos(wd*ti);
+			v= Math.exp(-xiwd*ti)*(da+db)/(m*wd);
+			
+			// Solve for acceleration
+			acc = (fi-c*v-k*y)/m;
+			
+			// Solve for spring and damping forces
+			double fs = y*k;
+			double fd = v*c;
+			p = Math.sqrt(Math.pow(fs, 2)+Math.pow(fd, 2));
+			
+			// Save the maximum value
+			if(Math.abs(y)>Math.abs(yMax))
+				yMax=y;
+			if(Math.abs(v)>Math.abs(vMax))
+				vMax = v;
+			if(Math.abs(acc)>Math.abs(aMax))
+				aMax=acc;
+			
+			// Increment variables
+			tiM1 = ti;
+			fiM1 = fi;
+			
+			Response r = new Response(ti, fi, y, v, acc);
+			responses.add(r);
+		}
+	}
+
+	/**
+	 * @param tiM1
+	 * @return
+	 */
+	private int int4(double tiM1) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	/**
+	 * @param ti
+	 * @return
+	 */
+	private int int3(double ti) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	/**
+	 * @param ti
+	 * @return
+	 */
+	private int int2(double ti) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	/**
+	 * @param ti
+	 * @return
+	 */
+	private int int1(double ti) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	/**
+	 * @return the k
+	 */
+	public double getK() {
+		return k;
+	}
+
+	/**
+	 * @param k the k to set
+	 */
+	public void setK(double k) {
+		this.k = k;
 	}
 }
