@@ -66,6 +66,7 @@ public class DisplacementChartPart {
 		axisSet.getYAxis(0).getTitle().setText("u");
 		series.setSymbolType(PlotSymbolType.NONE);
 		axisSet.adjustRange();
+		chart.redraw();
 	}
 
 	/**

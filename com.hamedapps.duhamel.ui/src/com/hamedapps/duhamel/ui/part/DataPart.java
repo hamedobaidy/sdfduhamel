@@ -55,6 +55,9 @@ public class DataPart {
 	private double omega_D = 0.0;
 	private Text textDt;
 	private double dt;
+	private Text textTmax;
+	private Button btnInterpulateBetweenForce;
+	private Button btnRecordsAreGround;
 	
 	@Inject
 	public DataPart() {
@@ -124,6 +127,10 @@ public class DataPart {
 		});
 		textM.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
+		btnInterpulateBetweenForce = new Button(parent, SWT.CHECK);
+		btnInterpulateBetweenForce.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
+		btnInterpulateBetweenForce.setText("Interpulate between force records");
+		
 		Label lblTimeStepdt = new Label(parent, SWT.NONE);
 		lblTimeStepdt.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblTimeStepdt.setText("Time Step (dt) : ");
@@ -137,6 +144,19 @@ public class DataPart {
 			}
 		});
 		textDt.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		new Label(parent, SWT.NONE);
+		new Label(parent, SWT.NONE);
+		
+		btnRecordsAreGround = new Button(parent, SWT.CHECK);
+		btnRecordsAreGround.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
+		btnRecordsAreGround.setText("Records are ground acceleration");
+		
+		Label lblFinalTime = new Label(parent, SWT.NONE);
+		lblFinalTime.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblFinalTime.setText("Final Time : ");
+		
+		textTmax = new Text(parent, SWT.BORDER);
+		textTmax.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		Label label = new Label(parent, SWT.SEPARATOR | SWT.HORIZONTAL | SWT.SHADOW_NONE);
 		label.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
@@ -234,7 +254,7 @@ public class DataPart {
 	/**
 	 * 
 	 */
-	protected void updateDt() {
+	private void updateDt() {
 		try {
 			dt = Double.parseDouble(textDt.getText());
 			duhamel.setDt(dt);
@@ -302,12 +322,10 @@ public class DataPart {
 	private void addTimeForce() {
 		double t = Double.parseDouble(textTime.getText());
 		double p = Double.parseDouble(textForce.getText());
-		double dt = Double.parseDouble(textDt.getText());
 		InputForce inf = new InputForce(t, p);
 		inputForces.add(inf);
 		tableViewer.refresh();
-		textTime.setText(Double.toString(t+dt));
-		textForce.setFocus();
+		textTime.setFocus();
 		duhamel.setInputForces(inputForces);
 	}
 
@@ -341,5 +359,35 @@ public class DataPart {
 		updateK();
 		updateM();
 		updateDt();
+		updateInerpolate();
+		updateIsGroundAcceleration();
+		updateTmax();
+		duhamel.setInputForces(inputForces);
+	}
+
+	/**
+	 * 
+	 */
+	private void updateTmax() {
+		try {
+			double tMax = Double.parseDouble(textTmax.getText());
+			duhamel.settMax(tMax);
+		} catch (NumberFormatException nfex) {
+			MessageDialog.openInformation(textTmax.getShell(), "Error", "Enter a valid value for \"Final Time\" filed.");
+		}
+	}
+
+	/**
+	 * 
+	 */
+	private void updateIsGroundAcceleration() {
+		duhamel.setForceIsGroundAcceleration(btnRecordsAreGround.getSelection());
+	}
+
+	/**
+	 * 
+	 */
+	private void updateInerpolate() {
+		duhamel.setInterpolate(btnInterpulateBetweenForce.getSelection());
 	}
 }

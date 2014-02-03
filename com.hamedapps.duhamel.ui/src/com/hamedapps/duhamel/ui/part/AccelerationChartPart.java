@@ -63,6 +63,7 @@ public class AccelerationChartPart {
 		axisSet.getYAxis(0).getTitle().setText("a");
 		series.setSymbolType(PlotSymbolType.NONE);
 		axisSet.adjustRange();
+		chart.redraw();
 	}
 
 	/**

@@ -40,6 +40,7 @@ public class InputChartPart {
 		chart = new Chart(scrolledComposite, SWT.NONE);
 		scrolledComposite.setContent(chart);
 		scrolledComposite.setMinSize(chart.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		chart.getTitle().setText("Inpute Forces");
 		updateChart();
 	}
 
@@ -71,6 +72,7 @@ public class InputChartPart {
 		IAxisSet axisSet = chart.getAxisSet();
 		series.setSymbolType(PlotSymbolType.NONE);
 		axisSet.adjustRange();
+		chart.redraw();
 	}
 	
 	
