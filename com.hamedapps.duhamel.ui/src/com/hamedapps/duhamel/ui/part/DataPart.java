@@ -58,6 +58,7 @@ public class DataPart {
 	private Text textTmax;
 	private Button btnInterpulateBetweenForce;
 	private Button btnRecordsAreGround;
+	private Text textGr;
 	
 	@Inject
 	public DataPart() {
@@ -144,12 +145,20 @@ public class DataPart {
 			}
 		});
 		textDt.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		new Label(parent, SWT.NONE);
-		new Label(parent, SWT.NONE);
+		
+		Label lblNewLabel = new Label(parent, SWT.SEPARATOR | SWT.HORIZONTAL);
+		lblNewLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
 		
 		btnRecordsAreGround = new Button(parent, SWT.CHECK);
 		btnRecordsAreGround.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
 		btnRecordsAreGround.setText("Records are ground acceleration");
+		
+		Label lblGravity = new Label(parent, SWT.NONE);
+		lblGravity.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblGravity.setText("Gravity : ");
+		
+		textGr = new Text(parent, SWT.BORDER);
+		textGr.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		Label lblFinalTime = new Label(parent, SWT.NONE);
 		lblFinalTime.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
@@ -157,9 +166,6 @@ public class DataPart {
 		
 		textTmax = new Text(parent, SWT.BORDER);
 		textTmax.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		
-		Label label = new Label(parent, SWT.SEPARATOR | SWT.HORIZONTAL | SWT.SHADOW_NONE);
-		label.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
 		
 		Label lblTime = new Label(parent, SWT.NONE);
 		lblTime.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
@@ -363,7 +369,20 @@ public class DataPart {
 		updateInerpolate();
 		updateIsGroundAcceleration();
 		updateTmax();
+		updateGr();
 		duhamel.setInputForces(inputForces);
+	}
+
+	/**
+	 * 
+	 */
+	private void updateGr() {
+		try{
+			double gr = Double.parseDouble(textGr.getText());
+			duhamel.setGr(gr);
+		} catch(NumberFormatException nfex) {
+			MessageDialog.openInformation(textGr.getShell(), "Error", "Enter a valid value for \"Gravity\" field.");
+		}
 	}
 
 	/**

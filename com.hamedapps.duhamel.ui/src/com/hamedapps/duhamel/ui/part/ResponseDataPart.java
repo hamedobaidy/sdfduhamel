@@ -30,7 +30,8 @@ public class ResponseDataPart {
 
 	private TableViewer tableViewer;
 
-	private DecimalFormat fiveDigit = new DecimalFormat("0.00000");
+	private DecimalFormat threeDigit = new DecimalFormat("0.000000");
+	private DecimalFormat twoDiFormat = new DecimalFormat("0.00");
 	
 	private Duhamel duhamel;
 	
@@ -67,7 +68,7 @@ public class ResponseDataPart {
 			@Override
 			public String getText(Object element) {
 				Response r = (Response)element;
-				return fiveDigit.format(r.getT());
+				return threeDigit.format(r.getT());
 			}
 		});
 		
@@ -82,7 +83,7 @@ public class ResponseDataPart {
 			@Override
 			public String getText(Object element) {
 				Response r = (Response)element;
-				return fiveDigit.format(r.getP());
+				return threeDigit.format(r.getP());
 			}
 		});
 		
@@ -97,7 +98,7 @@ public class ResponseDataPart {
 			@Override
 			public String getText(Object element) {
 				Response r = (Response)element;
-				return fiveDigit.format(r.getU());
+				return threeDigit.format(r.getU());
 			}
 		});
 		
@@ -112,7 +113,7 @@ public class ResponseDataPart {
 			@Override
 			public String getText(Object element) {
 				Response r = (Response)element;
-				return fiveDigit.format(r.getV());
+				return threeDigit.format(r.getV());
 			}
 		});
 		
@@ -127,7 +128,7 @@ public class ResponseDataPart {
 			@Override
 			public String getText(Object element) {
 				Response r = (Response)element;
-				return fiveDigit.format(r.getA());
+				return threeDigit.format(r.getA());
 			}
 		});
 		

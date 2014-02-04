@@ -23,6 +23,7 @@ public class Duhamel {
 	private double dt;
 	private double tMax;
 	private double k;
+	private double gr;
 
 	public Duhamel(Vector<InputForce> inputForces, double kesi, double m,
 			double omega, double omega_D) {
@@ -39,29 +40,26 @@ public class Duhamel {
 	public void compute() {
 		responses.clear();
 
-		
+		// interpolate if required
+		if (interpolate)
+			computeForces();
+		else
+			forces = inputForces;
+
+		// if records are base acceleration
+		if (forceIsGroundAcceleration)
+			computeForceFromGroundAcceleration();
+
+		// Compute for first time force record or time zero
 		// Compute A(t_0) and B(t_0) assuming A(t_-1)=B(t_-1)=0
 		double a_ti_1 = 0;
 		double b_ti_1 = 0;
 		
-		if(interpolate) 
-			computeForces();
-		else
-			forces = inputForces;
-		
-		if(forceIsGroundAcceleration)
-			computeForceFromGroundAcceleration();
-		
-		
-		
-		// Compute for first time force record or time zero
-		// TODO firs iteration must be corrected
-		
 		// and than add this response record to responses
-		// TODO the line below must be corrected
-		Response r0 = new Response(forces.get(0).getT(), forces.get(0).getP(), 0.0, 0.0, forces.get(0).getP()/m);
+		Response r0 = new Response(forces.get(0).getT(), forces.get(0).getP(),
+				0.0, 0.0, forces.get(0).getP() / m);
 		responses.add(r0);
-		
+
 		// While there is force record
 		// Compute I_1 to I_4 for t_i
 		// Compute A(t_i) and B(t_i)
@@ -70,25 +68,26 @@ public class Duhamel {
 		// Compute u"(t_i)
 		// TODO this loop must be corrected
 		for (int i = 1; i < forces.size(); i++) {
-			InputForce if_i = forces.get(i);
-			InputForce if_i_1 = forces.get(i - 1);
-			double ti = if_i.getT();
-			double ti_1 = if_i_1.getT();
-			double pi = if_i.getP();
-			double pi_1 = if_i_1.getP();
-			double i1M1 = computeI1limit(ti_1);
-			double i2M1 = computeI2limit(ti_1);
-			double i1 = computeI1limit(ti) - i1M1;
-			double i2 = computeI2limit(ti) - i2M1;
-			double i3 = computeI3limit(ti, i1, i2) - computeI3limit(ti_1, i1M1, i2M1);
-			double i4 = computeI4limit(ti, i1, i2)
-					- computeI4limit(ti_1, i1M1, i2M1);
+			InputForce fi = forces.get(i);
+			InputForce fi_1 = forces.get(i - 1);
+			double ti = fi.getT();
+			double ti_1 = fi_1.getT();
+			System.out.println("ti = " + ti + " ti_1 = " + ti_1);
+			double pi = fi.getP();
+			double pi_1 = fi_1.getP();
+			System.out.println("Pi = " + pi + " Pi_1 = " + pi_1);
+			double i1 = int1(ti)-int1(ti_1);
+			double i2 = int2(ti) - int2(ti_1);
+			double i3 = int3(ti)-int3(ti_1);
+			double i4 = int4(ti)- int4(ti_1);
+			System.out.println("i1= " + i1 + " i2 = " + i2 + "i3 = " + i3 + " i4 = " + i4);
+			System.out.println("Dp/Dt = " + (pi - pi_1) / (ti - ti_1));
 			double at = a_ti_1 + (pi_1 - ti_1 * ((pi - pi_1) / (ti - ti_1)))
-					* i2 + ((pi - pi_1) / (ti - ti_1)) * i4;
+					* i1 + ((pi - pi_1) / (ti - ti_1)) * i4;
 			double bt = b_ti_1 + (pi_1 - ti_1 * ((pi - pi_1) / (ti - ti_1)))
 					* i2 + ((pi - pi_1) / (ti - ti_1)) * i3;
 
-			double c = Math.pow(Math.E, -kesi * omega * ti) / (m * omega_D);
+			double c = Math.exp(-kesi * omega * ti) / (m * omega_D);
 			double cp = -kesi * omega * c;
 			double cpp = -kesi * omega * cp;
 			double d = at * Math.sin(omega_D * ti) - bt
@@ -117,9 +116,9 @@ public class Duhamel {
 		double tn = responses.get(responses.size() - 1).getT();
 
 		double t = tn;
-		
+
 		// Compute u, u', u" for free vibration until desired time
-		while(t<tMax) {
+		while (t < tMax) {
 			t += dt;
 			double e = Math.pow(Math.E, -kesi * omega * t);
 			double ep = -kesi * omega * e;
@@ -147,7 +146,7 @@ public class Duhamel {
 	 */
 	private void computeForceFromGroundAcceleration() {
 		for (InputForce force : forces) {
-			force.setP(-force.getP()*m);
+			force.setP(-force.getP() * m * gr);
 		}
 	}
 
@@ -157,10 +156,8 @@ public class Duhamel {
 	 * @param i2_i_1
 	 * @return
 	 */
-	private double computeI4limit(double t, double i1, double i2) {
-		double c1 = computeCI3_4_1(t);
-		double c2 = computeCI3_4_2(t);
-		return c1 * i1 - c2 * i2;
+	private double int4(double t) {
+		return c1(t) * int1(t) - c2(t) * int2(t);
 	}
 
 	/**
@@ -169,18 +166,15 @@ public class Duhamel {
 	 * @param i2_i_1
 	 * @return
 	 */
-	private double computeI3limit(double t, double i1, double i2) {
-		double c1 = computeCI3_4_1(t);
-		double c2 = computeCI3_4_2(t);
-
-		return c1 * i2 + c2 * i1;
+	private double int3(double t) {
+		return c1(t) * int2(t) + c2(t) * int1(t);
 	}
 
 	/**
 	 * @param t
 	 * @return
 	 */
-	private double computeCI3_4_2(double t) {
+	private double c2(double t) {
 		return omega_D / (Math.pow(kesi * omega, 2) + Math.pow(omega_D, 2));
 	}
 
@@ -188,7 +182,7 @@ public class Duhamel {
 	 * @param t
 	 * @return
 	 */
-	private double computeCI3_4_1(double t) {
+	private double c1(double t) {
 		return t
 				- ((kesi * omega) / (Math.pow(kesi * omega, 2) + Math.pow(
 						omega_D, 2)));
@@ -198,9 +192,8 @@ public class Duhamel {
 	 * @param t_0
 	 * @return
 	 */
-	private double computeI2limit(double t) {
-		double c = computeMultiplier1(t);
-		return c
+	private double int2(double t) {
+		return mult1(t)
 				* (kesi * omega * Math.sin(omega_D * t) - omega_D
 						* Math.cos(omega_D * t));
 	}
@@ -209,10 +202,8 @@ public class Duhamel {
 	 * @param d
 	 * @return
 	 */
-	private double computeI1limit(double t) {
-		double c = computeMultiplier1(t);
-
-		return c
+	private double int1(double t) {
+		return mult1(t)
 				* (kesi * omega * Math.cos(omega_D * t) + omega_D
 						* Math.sin(omega_D * t));
 	}
@@ -221,8 +212,8 @@ public class Duhamel {
 	 * @param t
 	 * @return
 	 */
-	private double computeMultiplier1(double t) {
-		return Math.pow(Math.E, kesi * omega * t)
+	private double mult1(double t) {
+		return Math.exp( kesi * omega * t)
 				/ (Math.pow(kesi * omega, 2) + Math.pow(omega_D, 2));
 	}
 
@@ -232,7 +223,7 @@ public class Duhamel {
 	private void computeForces() {
 		forces.clear();
 		double t = 0;
-		
+
 		for (int i = 1; i < inputForces.size(); i++) {
 			InputForce force1 = inputForces.get(i - 1);
 			double t1 = force1.getT();
@@ -241,11 +232,11 @@ public class Duhamel {
 			double t2 = force2.getT();
 			double f2 = force2.getP();
 
-			m = (f2 - f1) / (t2 - t1);
+			double ml = (f2 - f1) / (t2 - t1);
 			int j = 0;
-			while (t < (t2-dt)) {
+			while (t < (t2 - dt)) {
 				t = t1 + j * dt;
-				double f = f1+ m*j*dt;
+				double f = f1 + ml * j * dt;
 				InputForce force = new InputForce(t, f);
 				forces.add(force);
 				j++;
@@ -360,7 +351,8 @@ public class Duhamel {
 	}
 
 	/**
-	 * @param interpolate the interpolate to set
+	 * @param interpolate
+	 *            the interpolate to set
 	 */
 	public void setInterpolate(boolean interpolate) {
 		this.interpolate = interpolate;
@@ -374,7 +366,8 @@ public class Duhamel {
 	}
 
 	/**
-	 * @param forceIsGroundAcceleration the forceIsGroundAcceleration to set
+	 * @param forceIsGroundAcceleration
+	 *            the forceIsGroundAcceleration to set
 	 */
 	public void setForceIsGroundAcceleration(boolean forceIsGroundAcceleration) {
 		this.forceIsGroundAcceleration = forceIsGroundAcceleration;
@@ -388,7 +381,8 @@ public class Duhamel {
 	}
 
 	/**
-	 * @param k the k to set
+	 * @param k
+	 *            the k to set
 	 */
 	public void setK(double k) {
 		this.k = k;
@@ -402,9 +396,25 @@ public class Duhamel {
 	}
 
 	/**
-	 * @param tMax the tMax to set
+	 * @param tMax
+	 *            the tMax to set
 	 */
 	public void settMax(double tMax) {
 		this.tMax = tMax;
+	}
+
+	/**
+	 * @return the gr
+	 */
+	public double getGr() {
+		return gr;
+	}
+
+	/**
+	 * @param gr
+	 *            the gr to set
+	 */
+	public void setGr(double gr) {
+		this.gr = gr;
 	}
 }
