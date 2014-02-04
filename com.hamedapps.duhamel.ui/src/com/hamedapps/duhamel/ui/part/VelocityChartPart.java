@@ -40,7 +40,7 @@ public class VelocityChartPart {
 		chart = new Chart(scrolledComposite, SWT.NONE);
 		scrolledComposite.setContent(chart);
 		scrolledComposite.setMinSize(chart.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-		//TODO Your code here
+		chart.getTitle().setText("Velocity Response Chart");
 	}
 
 	/**
@@ -63,6 +63,7 @@ public class VelocityChartPart {
 		axisSet.getYAxis(0).getTitle().setText("v");
 		series.setSymbolType(PlotSymbolType.NONE);
 		axisSet.adjustRange();
+		chart.redraw();
 	}
 
 	/**

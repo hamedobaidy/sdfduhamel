@@ -1,6 +1,7 @@
  
 package com.hamedapps.duhamel.ui.part;
 
+import java.text.DecimalFormat;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
@@ -29,6 +30,8 @@ public class ResponseDataPart {
 
 	private TableViewer tableViewer;
 
+	private DecimalFormat fiveDigit = new DecimalFormat("0.00000");
+	
 	private Duhamel duhamel;
 	
 	@Inject
@@ -53,78 +56,78 @@ public class ResponseDataPart {
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 		
-		TableViewerColumn tableViewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
-		TableColumn tblclmnTime = tableViewerColumn.getColumn();
+		TableViewerColumn tableViewerColumnT = new TableViewerColumn(tableViewer, SWT.NONE);
+		TableColumn tblclmnTime = tableViewerColumnT.getColumn();
 		tcl_composite.setColumnData(tblclmnTime, new ColumnPixelData(50, true, true));
 		tblclmnTime.setText("Time");
-		tableViewerColumn.setLabelProvider(new ColumnLabelProvider() {
+		tableViewerColumnT.setLabelProvider(new ColumnLabelProvider() {
 			/* (non-Javadoc)
 			 * @see org.eclipse.jface.viewers.ColumnLabelProvider#getText(java.lang.Object)
 			 */
 			@Override
 			public String getText(Object element) {
 				Response r = (Response)element;
-				return Double.toString(r.getT());
+				return fiveDigit.format(r.getT());
 			}
 		});
 		
-		TableViewerColumn tableViewerColumn_1 = new TableViewerColumn(tableViewer, SWT.NONE);
-		TableColumn tblclmnForce = tableViewerColumn_1.getColumn();
+		TableViewerColumn tableViewerColumnForce = new TableViewerColumn(tableViewer, SWT.NONE);
+		TableColumn tblclmnForce = tableViewerColumnForce.getColumn();
 		tcl_composite.setColumnData(tblclmnForce, new ColumnPixelData(150, true, true));
 		tblclmnForce.setText("Force");
-		tableViewerColumn_1.setLabelProvider(new ColumnLabelProvider() {
+		tableViewerColumnForce.setLabelProvider(new ColumnLabelProvider() {
 			/* (non-Javadoc)
 			 * @see org.eclipse.jface.viewers.ColumnLabelProvider#getText(java.lang.Object)
 			 */
 			@Override
 			public String getText(Object element) {
 				Response r = (Response)element;
-				return Double.toString(r.getP());
+				return fiveDigit.format(r.getP());
 			}
 		});
 		
-		TableViewerColumn tableViewerColumn_2 = new TableViewerColumn(tableViewer, SWT.NONE);
-		TableColumn tblclmnU = tableViewerColumn_2.getColumn();
+		TableViewerColumn tableViewerColumnDis = new TableViewerColumn(tableViewer, SWT.NONE);
+		TableColumn tblclmnU = tableViewerColumnDis.getColumn();
 		tcl_composite.setColumnData(tblclmnU, new ColumnPixelData(150, true, true));
 		tblclmnU.setText("Displacement");
-		tableViewerColumn_2.setLabelProvider(new ColumnLabelProvider() {
+		tableViewerColumnDis.setLabelProvider(new ColumnLabelProvider() {
 			/* (non-Javadoc)
 			 * @see org.eclipse.jface.viewers.ColumnLabelProvider#getText(java.lang.Object)
 			 */
 			@Override
 			public String getText(Object element) {
 				Response r = (Response)element;
-				return Double.toString(r.getU());
+				return fiveDigit.format(r.getU());
 			}
 		});
 		
-		TableViewerColumn tableViewerColumn_3 = new TableViewerColumn(tableViewer, SWT.NONE);
-		TableColumn tblclmnV = tableViewerColumn_3.getColumn();
+		TableViewerColumn tableViewerColumnVel = new TableViewerColumn(tableViewer, SWT.NONE);
+		TableColumn tblclmnV = tableViewerColumnVel.getColumn();
 		tcl_composite.setColumnData(tblclmnV, new ColumnPixelData(150, true, true));
 		tblclmnV.setText("Velocity");
-		tableViewerColumn_3.setLabelProvider(new ColumnLabelProvider() {
+		tableViewerColumnVel.setLabelProvider(new ColumnLabelProvider() {
 			/* (non-Javadoc)
 			 * @see org.eclipse.jface.viewers.ColumnLabelProvider#getText(java.lang.Object)
 			 */
 			@Override
 			public String getText(Object element) {
 				Response r = (Response)element;
-				return Double.toString(r.getU());
+				return fiveDigit.format(r.getV());
 			}
 		});
 		
-		TableViewerColumn tableViewerColumn_4 = new TableViewerColumn(tableViewer, SWT.NONE);
-		TableColumn tblclmnA = tableViewerColumn_4.getColumn();
+		TableViewerColumn tableViewerColumnAcc = new TableViewerColumn(tableViewer, SWT.NONE);
+		TableColumn tblclmnA = tableViewerColumnAcc.getColumn();
 		tcl_composite.setColumnData(tblclmnA, new ColumnPixelData(150, true, true));
 		tblclmnA.setText("Acceleration");
-		tableViewerColumn_4.setLabelProvider(new ColumnLabelProvider() {
+		tableViewerColumnAcc.setLabelProvider(new ColumnLabelProvider() {
 			/* (non-Javadoc)
 			 * @see org.eclipse.jface.viewers.ColumnLabelProvider#getText(java.lang.Object)
 			 */
 			@Override
 			public String getText(Object element) {
 				Response r = (Response)element;
-				return Double.toString(r.getU());
+				return fiveDigit.format(r.getA());
 			}
 		});
 		
