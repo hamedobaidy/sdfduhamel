@@ -69,17 +69,19 @@ public class DataPart {
 	
 	@PostConstruct
 	public void postConstruct(Composite parent) {
-		parent.setLayout(new GridLayout(2, false));
 		
-//		// Test
-//		application.getContext().set("inputForces", inputForces);
-		application.getContext().set("duhamel", duhamel);
+		ScrolledComposite scrolledComposite_1 = new ScrolledComposite(parent, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+		scrolledComposite_1.setBounds(0, 0, 448, 548);
+		scrolledComposite_1.setExpandHorizontal(true);
+		scrolledComposite_1.setExpandVertical(true);
+		Composite mainComposite = new Composite(scrolledComposite_1, SWT.NONE);
+		mainComposite.setLayout(new GridLayout(2, false));
 		
-		Label lblXi = new Label(parent, SWT.NONE);
+		Label lblXi = new Label(mainComposite, SWT.NONE);
 		lblXi.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblXi.setText("xi: ");
 		
-		textXi = new Text(parent, SWT.BORDER);
+		textXi = new Text(mainComposite, SWT.BORDER);
 		textXi.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -94,11 +96,11 @@ public class DataPart {
 		});
 		textXi.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
-		Label lblK = new Label(parent, SWT.NONE);
+		Label lblK = new Label(mainComposite, SWT.NONE);
 		lblK.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblK.setText("k: ");
 		
-		textK = new Text(parent, SWT.BORDER);
+		textK = new Text(mainComposite, SWT.BORDER);
 		textK.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -113,11 +115,11 @@ public class DataPart {
 		});
 		textK.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
-		Label lblM = new Label(parent, SWT.NONE);
+		Label lblM = new Label(mainComposite, SWT.NONE);
 		lblM.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblM.setText("m: ");
 		
-		textM = new Text(parent, SWT.BORDER);
+		textM = new Text(mainComposite, SWT.BORDER);
 		textM.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent e) {
@@ -126,15 +128,15 @@ public class DataPart {
 		});
 		textM.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
-		btnInterpulateBetweenForce = new Button(parent, SWT.CHECK);
+		btnInterpulateBetweenForce = new Button(mainComposite, SWT.CHECK);
 		btnInterpulateBetweenForce.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
 		btnInterpulateBetweenForce.setText("Interpulate between force records");
 		
-		Label lblTimeStepdt = new Label(parent, SWT.NONE);
+		Label lblTimeStepdt = new Label(mainComposite, SWT.NONE);
 		lblTimeStepdt.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblTimeStepdt.setText("Time Step (dt) : ");
 		
-		textDt = new Text(parent, SWT.BORDER);
+		textDt = new Text(mainComposite, SWT.BORDER);
 		textDt.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent e) {
@@ -143,32 +145,32 @@ public class DataPart {
 		});
 		textDt.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
-		Label lblNewLabel = new Label(parent, SWT.SEPARATOR | SWT.HORIZONTAL);
+		Label lblNewLabel = new Label(mainComposite, SWT.SEPARATOR | SWT.HORIZONTAL);
 		lblNewLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
 		
-		btnRecordsAreGround = new Button(parent, SWT.CHECK);
+		btnRecordsAreGround = new Button(mainComposite, SWT.CHECK);
 		btnRecordsAreGround.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
 		btnRecordsAreGround.setText("Records are ground acceleration");
 		
-		Label lblGravity = new Label(parent, SWT.NONE);
+		Label lblGravity = new Label(mainComposite, SWT.NONE);
 		lblGravity.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblGravity.setText("Gravity : ");
 		
-		textGr = new Text(parent, SWT.BORDER);
+		textGr = new Text(mainComposite, SWT.BORDER);
 		textGr.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
-		Label lblFinalTime = new Label(parent, SWT.NONE);
+		Label lblFinalTime = new Label(mainComposite, SWT.NONE);
 		lblFinalTime.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblFinalTime.setText("Final Time : ");
 		
-		textTmax = new Text(parent, SWT.BORDER);
+		textTmax = new Text(mainComposite, SWT.BORDER);
 		textTmax.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
-		Label lblTime = new Label(parent, SWT.NONE);
+		Label lblTime = new Label(mainComposite, SWT.NONE);
 		lblTime.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblTime.setText("Time: ");
 		
-		textTime = new Text(parent, SWT.BORDER);
+		textTime = new Text(mainComposite, SWT.BORDER);
 		textTime.setText("0.0");
 		textTime.addFocusListener(new FocusAdapter() {
 			@Override
@@ -178,11 +180,11 @@ public class DataPart {
 		});
 		textTime.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
-		Label lblForce = new Label(parent, SWT.NONE);
+		Label lblForce = new Label(mainComposite, SWT.NONE);
 		lblForce.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblForce.setText("Force: ");
 		
-		textForce = new Text(parent, SWT.BORDER);
+		textForce = new Text(mainComposite, SWT.BORDER);
 		textForce.setText("0.0");
 		textForce.addFocusListener(new FocusAdapter() {
 			@Override
@@ -192,10 +194,10 @@ public class DataPart {
 		});
 		textForce.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
-		Label lblForceRecords = new Label(parent, SWT.NONE);
+		Label lblForceRecords = new Label(mainComposite, SWT.NONE);
 		lblForceRecords.setText("Force Records : ");
 		
-		Button btnAdd = new Button(parent, SWT.NONE);
+		Button btnAdd = new Button(mainComposite, SWT.NONE);
 		btnAdd.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -205,7 +207,7 @@ public class DataPart {
 		btnAdd.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		btnAdd.setText("Add");
 		
-		Composite composite_1 = new Composite(parent, SWT.NONE);
+		Composite composite_1 = new Composite(mainComposite, SWT.NONE);
 		composite_1.setLayout(new FillLayout(SWT.HORIZONTAL));
 		composite_1.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 2, 1));
 		
@@ -221,7 +223,7 @@ public class DataPart {
 		Button btnImport = new Button(composite_1, SWT.NONE);
 		btnImport.setText("Import ...");
 		
-		ScrolledComposite scrolledComposite = new ScrolledComposite(parent, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+		ScrolledComposite scrolledComposite = new ScrolledComposite(mainComposite, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		scrolledComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
 		scrolledComposite.setExpandHorizontal(true);
 		scrolledComposite.setExpandVertical(true);
@@ -269,6 +271,12 @@ public class DataPart {
 		tableViewer.setInput(inputForces);
 		scrolledComposite.setContent(composite);
 		scrolledComposite.setMinSize(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		scrolledComposite_1.setContent(mainComposite);
+		scrolledComposite_1.setMinSize(mainComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		
+//		// Test
+//		application.getContext().set("inputForces", inputForces);
+		application.getContext().set("duhamel", duhamel);
 		
 	}
 

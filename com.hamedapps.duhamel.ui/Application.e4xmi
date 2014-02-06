@@ -5,42 +5,47 @@
       <children xsi:type="advanced:Perspective" xmi:id="__og88IaUEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.perspective.0" label="Main">
         <children xsi:type="basic:PartSashContainer" xmi:id="_Bvw9UIaVEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.partsashcontainer.0" horizontal="true">
           <children xsi:type="basic:PartStack" xmi:id="_GI1PUIaVEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.partstack.0" containerData="300">
-            <children xsi:type="basic:Part" xmi:id="_Gu2GcIaVEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.part.datapart" containerData="" contributionURI="bundleclass://com.hamedapps.duhamel.ui/com.hamedapps.duhamel.ui.part.DataPart" label="Given Data" tooltip="System Properties and Input Force Records"/>
+            <children xsi:type="basic:Part" xmi:id="_Gu2GcIaVEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.part.datapart" containerData="" contributionURI="bundleclass://com.hamedapps.duhamel.ui/com.hamedapps.duhamel.ui.part.DataPart" label="Given Data" iconURI="platform:/plugin/com.hamedapps.duhamel.ui/icons/gnome-control-center.png" tooltip="System Properties and Input Force Records"/>
           </children>
           <children xsi:type="basic:PartStack" xmi:id="_YYCxwIaVEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.partstack.1" containerData="700">
-            <children xsi:type="basic:Part" xmi:id="_ZCPlUIaVEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.part.responsedata" contributionURI="bundleclass://com.hamedapps.duhamel.ui/com.hamedapps.duhamel.ui.part.ResponseDataPart" label="Response" tooltip="Response Data"/>
-            <children xsi:type="basic:Part" xmi:id="_stRRkIatEeOybKxRtIKcrA" elementId="com.hamedapps.duhamel.ui.part.inputchartpart" contributionURI="bundleclass://com.hamedapps.duhamel.ui/com.hamedapps.duhamel.ui.part.InputChartPart" label="Input Force" tooltip="Input Force Graph"/>
-            <children xsi:type="basic:Part" xmi:id="_sNkKsIaVEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.part.displacementchartpart" contributionURI="bundleclass://com.hamedapps.duhamel.ui/com.hamedapps.duhamel.ui.part.DisplacementChartPart" label="Displacement" tooltip="Displacement Response Graph"/>
-            <children xsi:type="basic:Part" xmi:id="_7WG3IIaVEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.part.velocitychartpart" contributionURI="bundleclass://com.hamedapps.duhamel.ui/com.hamedapps.duhamel.ui.part.VelocityChartPart" label="Velocity" tooltip="Velocity Response Graph"/>
-            <children xsi:type="basic:Part" xmi:id="_C6aWEIaWEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.part.accelerationchartpart" contributionURI="bundleclass://com.hamedapps.duhamel.ui/com.hamedapps.duhamel.ui.part.AccelerationChartPart" label="Acceleration" tooltip="Acceleration Response Graph"/>
-            <children xsi:type="basic:Part" xmi:id="_WXw70I6HEeO4MuKnTKZ-Yw" elementId="com.hamedapps.duhamel.ui.part.supreactionpart" contributionURI="bundleclass://com.hamedapps.duhamel.ui/com.hamedapps.duhamel.ui.part.SupportReactionPart" label="Support Reaction" tooltip="Support Reaction Graph"/>
+            <children xsi:type="basic:Part" xmi:id="_ZCPlUIaVEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.part.responsedata" contributionURI="bundleclass://com.hamedapps.duhamel.ui/com.hamedapps.duhamel.ui.part.ResponseDataPart" label="Response" iconURI="platform:/plugin/com.hamedapps.duhamel.ui/icons/application-vnd.ms-excel.sheet.macroEnabled.12.png" tooltip="Response Data"/>
+            <children xsi:type="basic:Part" xmi:id="_stRRkIatEeOybKxRtIKcrA" elementId="com.hamedapps.duhamel.ui.part.inputchartpart" contributionURI="bundleclass://com.hamedapps.duhamel.ui/com.hamedapps.duhamel.ui.part.InputChartPart" label="Input Force" iconURI="platform:/plugin/com.hamedapps.duhamel.ui/icons/image.png" tooltip="Input Force Graph"/>
+            <children xsi:type="basic:Part" xmi:id="_sNkKsIaVEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.part.displacementchartpart" contributionURI="bundleclass://com.hamedapps.duhamel.ui/com.hamedapps.duhamel.ui.part.DisplacementChartPart" label="Displacement" iconURI="platform:/plugin/com.hamedapps.duhamel.ui/icons/image.png" tooltip="Displacement Response Graph"/>
+            <children xsi:type="basic:Part" xmi:id="_7WG3IIaVEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.part.velocitychartpart" contributionURI="bundleclass://com.hamedapps.duhamel.ui/com.hamedapps.duhamel.ui.part.VelocityChartPart" label="Velocity" iconURI="platform:/plugin/com.hamedapps.duhamel.ui/icons/image.png" tooltip="Velocity Response Graph"/>
+            <children xsi:type="basic:Part" xmi:id="_C6aWEIaWEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.part.accelerationchartpart" contributionURI="bundleclass://com.hamedapps.duhamel.ui/com.hamedapps.duhamel.ui.part.AccelerationChartPart" label="Acceleration" iconURI="platform:/plugin/com.hamedapps.duhamel.ui/icons/image.png" tooltip="Acceleration Response Graph"/>
+            <children xsi:type="basic:Part" xmi:id="_WXw70I6HEeO4MuKnTKZ-Yw" elementId="com.hamedapps.duhamel.ui.part.supreactionpart" contributionURI="bundleclass://com.hamedapps.duhamel.ui/com.hamedapps.duhamel.ui.part.SupportReactionPart" label="Support Reaction" iconURI="platform:/plugin/com.hamedapps.duhamel.ui/icons/image.png" tooltip="Support Reaction Graph"/>
           </children>
         </children>
       </children>
     </children>
     <mainMenu xmi:id="_3JTJYIaeEeOj3uMHkZ9CbQ" elementId="org.eclipse.ui.main.menu">
       <children xsi:type="menu:Menu" xmi:id="_6axhMIaeEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.menu.file" label="&amp;File">
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_SgPFUIafEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.handledmenuitem.exit" command="_-a684IaeEeOj3uMHkZ9CbQ"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_v3rf8I8wEeOwNdOLiz7AHw" elementId="com.hamedapps.duhamel.ui.handledmenuitem.open" label="Open ..." iconURI="platform:/plugin/com.hamedapps.duhamel.ui/icons/document-open.png" tooltip="Open File ..." command="_CSfgUI8vEeOTVPe7CZrgTA"/>
+        <children xsi:type="menu:MenuSeparator" xmi:id="_482UsI8wEeOwNdOLiz7AHw" elementId="com.hamedapps.duhamel.ui.menuseparator.0"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_SgPFUIafEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.handledmenuitem.exit" label="Exit" iconURI="platform:/plugin/com.hamedapps.duhamel.ui/icons/exit.png" tooltip="Exit the application" command="_-a684IaeEeOj3uMHkZ9CbQ"/>
       </children>
       <children xsi:type="menu:Menu" xmi:id="_p1xBUIafEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.menu.0" label="&amp;Tools">
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_r9N2AIafEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.handledmenuitem.compute" command="_WXC-0IafEeOj3uMHkZ9CbQ"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_r9N2AIafEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.handledmenuitem.compute" label="Compute" iconURI="platform:/plugin/com.hamedapps.duhamel.ui/icons/gtk-media-play-ltr.png" tooltip="Compute" command="_WXC-0IafEeOj3uMHkZ9CbQ"/>
       </children>
       <children xsi:type="menu:Menu" xmi:id="_wqnZQIafEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.menu.help" label="&amp;Help">
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_zeICsIafEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.handledmenuitem.0" command="_1MmWsIafEeOj3uMHkZ9CbQ"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_zeICsIafEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.handledmenuitem.0" label="About" iconURI="platform:/plugin/com.hamedapps.duhamel.ui/icons/help-about.png" command="_1MmWsIafEeOj3uMHkZ9CbQ"/>
       </children>
     </mainMenu>
     <trimBars xmi:id="_E5iJoIagEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.trimbar.0">
       <children xsi:type="menu:ToolBar" xmi:id="_Hovh4IagEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.toolbar.0">
-        <children xsi:type="menu:HandledToolItem" xmi:id="_IXPmoIagEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.handledtoolitem.0" label="Compute" command="_WXC-0IafEeOj3uMHkZ9CbQ"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_3DfpkI80EeOwNdOLiz7AHw" elementId="com.hamedapps.duhamel.ui.handledtoolitem.open" iconURI="platform:/plugin/com.hamedapps.duhamel.ui/icons/document-open.png" command="_CSfgUI8vEeOTVPe7CZrgTA"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_IXPmoIagEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.handledtoolitem.0" label="Compute" iconURI="platform:/plugin/com.hamedapps.duhamel.ui/icons/gtk-media-play-ltr.png" command="_WXC-0IafEeOj3uMHkZ9CbQ"/>
       </children>
     </trimBars>
   </children>
   <handlers xmi:id="_CuzM4IafEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.handler.exit" contributionURI="bundleclass://com.hamedapps.duhamel.ui/com.hamedapps.duhamel.ui.handler.ExitHandler" command="_-a684IaeEeOj3uMHkZ9CbQ"/>
   <handlers xmi:id="_Zd2-wIafEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.handler.compute" contributionURI="bundleclass://com.hamedapps.duhamel.ui/com.hamedapps.duhamel.ui.handler.ComputeHandler" command="_WXC-0IafEeOj3uMHkZ9CbQ"/>
   <handlers xmi:id="_4_NssIafEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.handler.helpabout" contributionURI="bundleclass://com.hamedapps.duhamel.ui/com.hamedapps.duhamel.ui.handler.AboutHandler" command="_1MmWsIafEeOj3uMHkZ9CbQ"/>
+  <handlers xmi:id="_jQSXEI8vEeOTVPe7CZrgTA" elementId="com.hamedapps.duhamel.ui.handler.open" contributionURI="bundleclass://com.hamedapps.duhamel.ui/com.hamedapps.duhamel.ui.handler.OpenHandler" command="_CSfgUI8vEeOTVPe7CZrgTA"/>
   <commands xmi:id="_-a684IaeEeOj3uMHkZ9CbQ" elementId="org.eclipse.ui.file.exit" commandName="Exit"/>
   <commands xmi:id="_WXC-0IafEeOj3uMHkZ9CbQ" elementId="com.hamedapps.duhamel.ui.command.compute" commandName="Compute"/>
   <commands xmi:id="_1MmWsIafEeOj3uMHkZ9CbQ" elementId="org.eclipse.ui.help.aboutAction" commandName="About"/>
+  <commands xmi:id="_CSfgUI8vEeOTVPe7CZrgTA" elementId="org.eclipse.ui.file.open" commandName="Open ..."/>
   <addons xmi:id="_DcW3cYaUEeOj3uMHkZ9CbQ" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
   <addons xmi:id="_DcXegIaUEeOj3uMHkZ9CbQ" elementId="org.eclipse.e4.ui.contexts.service" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
   <addons xmi:id="_DcXegYaUEeOj3uMHkZ9CbQ" elementId="org.eclipse.e4.ui.bindings.service" contributionURI="bundleclass://org.eclipse.e4.ui.bindings/org.eclipse.e4.ui.bindings.BindingServiceAddon"/>
