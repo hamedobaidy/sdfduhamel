@@ -31,6 +31,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.hamedapps.duhamel.Duhamel;
 import com.hamedapps.duhamel.InputForce;
+import org.eclipse.swt.layout.FillLayout;
 
 public class DataPart {
 	private Text textXi;
@@ -79,7 +80,6 @@ public class DataPart {
 		lblXi.setText("xi: ");
 		
 		textXi = new Text(parent, SWT.BORDER);
-		textXi.setText("0.2");
 		textXi.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -99,7 +99,6 @@ public class DataPart {
 		lblK.setText("k: ");
 		
 		textK = new Text(parent, SWT.BORDER);
-		textK.setText("1000");
 		textK.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -119,7 +118,6 @@ public class DataPart {
 		lblM.setText("m: ");
 		
 		textM = new Text(parent, SWT.BORDER);
-		textM.setText("10000");
 		textM.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent e) {
@@ -137,7 +135,6 @@ public class DataPart {
 		lblTimeStepdt.setText("Time Step (dt) : ");
 		
 		textDt = new Text(parent, SWT.BORDER);
-		textDt.setText("0.01");
 		textDt.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent e) {
@@ -186,7 +183,7 @@ public class DataPart {
 		lblForce.setText("Force: ");
 		
 		textForce = new Text(parent, SWT.BORDER);
-		textForce.setText("1.0");
+		textForce.setText("0.0");
 		textForce.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
@@ -194,7 +191,9 @@ public class DataPart {
 			}
 		});
 		textForce.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		new Label(parent, SWT.NONE);
+		
+		Label lblForceRecords = new Label(parent, SWT.NONE);
+		lblForceRecords.setText("Force Records : ");
 		
 		Button btnAdd = new Button(parent, SWT.NONE);
 		btnAdd.addSelectionListener(new SelectionAdapter() {
@@ -205,6 +204,22 @@ public class DataPart {
 		});
 		btnAdd.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		btnAdd.setText("Add");
+		
+		Composite composite_1 = new Composite(parent, SWT.NONE);
+		composite_1.setLayout(new FillLayout(SWT.HORIZONTAL));
+		composite_1.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 2, 1));
+		
+		Button btnAdd_1 = new Button(composite_1, SWT.NONE);
+		btnAdd_1.setText("Add");
+		
+		Button btnRemove = new Button(composite_1, SWT.NONE);
+		btnRemove.setText("Remove");
+		
+		Button btnEdit = new Button(composite_1, SWT.NONE);
+		btnEdit.setText("Edit ...");
+		
+		Button btnImport = new Button(composite_1, SWT.NONE);
+		btnImport.setText("Import ...");
 		
 		ScrolledComposite scrolledComposite = new ScrolledComposite(parent, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		scrolledComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
@@ -220,11 +235,11 @@ public class DataPart {
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 		
-		TableViewerColumn tableViewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
-		TableColumn tblclmnTimesec = tableViewerColumn.getColumn();
-		tcl_composite.setColumnData(tblclmnTimesec, new ColumnPixelData(50, true, true));
+		TableViewerColumn tableViewerColumnTime = new TableViewerColumn(tableViewer, SWT.NONE);
+		TableColumn tblclmnTimesec = tableViewerColumnTime.getColumn();
+		tcl_composite.setColumnData(tblclmnTimesec, new ColumnPixelData(115, true, true));
 		tblclmnTimesec.setText("Time (sec)");
-		tableViewerColumn.setLabelProvider(new ColumnLabelProvider() {
+		tableViewerColumnTime.setLabelProvider(new ColumnLabelProvider() {
 			/* (non-Javadoc)
 			 * @see org.eclipse.jface.viewers.ColumnLabelProvider#getText(java.lang.Object)
 			 */
@@ -235,11 +250,11 @@ public class DataPart {
 			}
 		});
 		
-		TableViewerColumn tableViewerColumn_1 = new TableViewerColumn(tableViewer, SWT.NONE);
-		TableColumn tblclmnForce = tableViewerColumn_1.getColumn();
+		TableViewerColumn tableViewerColumnForce = new TableViewerColumn(tableViewer, SWT.NONE);
+		TableColumn tblclmnForce = tableViewerColumnForce.getColumn();
 		tcl_composite.setColumnData(tblclmnForce, new ColumnPixelData(150, true, true));
-		tblclmnForce.setText("Force");
-		tableViewerColumn_1.setLabelProvider(new ColumnLabelProvider() {
+		tblclmnForce.setText("Force or Sup Acc");
+		tableViewerColumnForce.setLabelProvider(new ColumnLabelProvider() {
 			/* (non-Javadoc)
 			 * @see org.eclipse.jface.viewers.ColumnLabelProvider#getText(java.lang.Object)
 			 */
@@ -333,7 +348,7 @@ public class DataPart {
 		inputForces.add(inf);
 		tableViewer.refresh();
 		textTime.setFocus();
-		duhamel.setInputForces(inputForces);
+//		duhamel.setInputForces(inputForces);
 	}
 
 	public Vector<InputForce> getInputForces() {
@@ -371,6 +386,8 @@ public class DataPart {
 		updateTmax();
 		updateGr();
 		duhamel.setInputForces(inputForces);
+		duhamel.setInterpolate(btnInterpulateBetweenForce.getSelection());
+		duhamel.setForceIsGroundAcceleration(btnRecordsAreGround.getSelection());
 	}
 
 	/**

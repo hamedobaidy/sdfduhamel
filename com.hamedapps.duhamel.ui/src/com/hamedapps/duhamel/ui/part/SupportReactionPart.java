@@ -1,14 +1,14 @@
  
 package com.hamedapps.duhamel.ui.part;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import javax.annotation.PostConstruct;
 
 import org.eclipse.e4.core.contexts.IEclipseContext;
-import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.SWT;
 import org.swtchart.Chart;
 import org.swtchart.IAxisSet;
 import org.swtchart.ILineSeries;
@@ -18,14 +18,14 @@ import org.swtchart.ISeriesSet;
 
 import com.hamedapps.duhamel.Duhamel;
 
-public class InputChartPart {
+public class SupportReactionPart {
 	private Chart chart;
 	private Duhamel duhamel;
 	@Inject
 	private IEclipseContext context;
-
+	
 	@Inject
-	public InputChartPart() {
+	public SupportReactionPart() {
 		//TODO Your code here
 	}
 	
@@ -40,10 +40,10 @@ public class InputChartPart {
 		chart = new Chart(scrolledComposite, SWT.NONE);
 		scrolledComposite.setContent(chart);
 		scrolledComposite.setMinSize(chart.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-		chart.getTitle().setText("Inpute Forces");
+		chart.getTitle().setText("Support Reaction Graph");
 		updateChart();
 	}
-
+	
 	/**
 	 * 
 	 */
@@ -57,16 +57,16 @@ public class InputChartPart {
 	 * 
 	 */
 	private void refreshChart() {
-		double[] ts = new double[duhamel.getInputForces().size()];
-		double[] fs = new double[duhamel.getInputForces().size()];
+		double[] ts = new double[duhamel.getResponses().size()];
+		double[] fs = new double[duhamel.getResponses().size()];
 		
 		for(int i = 0; i < ts.length; i++ ) {
-			ts[i] = duhamel.getInputForces().get(i).getT();
-			fs[i] = duhamel.getInputForces().get(i).getP();
+			ts[i] = duhamel.getResponses().get(i).getT();
+			fs[i] = duhamel.getResponses().get(i).getvSup();					
 		}
 		
 		ISeriesSet seriesSet = chart.getSeriesSet();
-		ILineSeries series = (ILineSeries) seriesSet.createSeries(SeriesType.LINE, "Input Force");
+		ILineSeries series = (ILineSeries) seriesSet.createSeries(SeriesType.LINE, "Support Reaction");
 		series.setYSeries(fs);
 		series.setXSeries(ts);
 		IAxisSet axisSet = chart.getAxisSet();
@@ -74,8 +74,6 @@ public class InputChartPart {
 		axisSet.adjustRange();
 		chart.redraw();
 	}
-	
-	
 	
 	
 }

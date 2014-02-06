@@ -8,18 +8,19 @@ package com.hamedapps.duhamel;
  *
  */
 public class Response {
-	private double t, u, p, v, a;
+	private double t, u, p, v, a, vSup;
 
 	/**
 	 * 
 	 */
-	public Response(double t, double p, double u, double v, double a) {
+	public Response(double t, double p, double u, double v, double a, double vSup) {
 		this.t = t;
 		this.u = u;
 		this.p = p;
 		this.u = u;
 		this.v = v;
 		this.a = a;
+		this.vSup = vSup;
 	}
 	
 	public double getU() {
@@ -72,6 +73,20 @@ public class Response {
 	 */
 	public void setA(double a) {
 		this.a = a;
+	}
+
+	/**
+	 * @return the vSup
+	 */
+	public double getvSup() {
+		return vSup;
+	}
+
+	/**
+	 * @param vSup the vSup to set
+	 */
+	public void setvSup(double vSup) {
+		this.vSup = vSup;
 	}
 
 }

@@ -24,6 +24,10 @@ public class Duhamel {
 	private double tMax;
 	private double k;
 	private double gr;
+	private double uMax;
+	private double vMax;
+	private double aMax;
+	private double vSupMax;
 
 	public Duhamel(Vector<InputForce> inputForces, double kesi, double m,
 			double omega, double omega_D) {
@@ -40,6 +44,13 @@ public class Duhamel {
 	public void compute() {
 		responses.clear();
 
+		double dampC = kesi * 2 * Math.sqrt(k * m);
+
+		uMax = 0.0;
+		vMax = 0.0;
+		aMax = 0.0;
+		vSupMax = 0.0;
+
 		// interpolate if required
 		if (interpolate)
 			computeForces();
@@ -54,10 +65,10 @@ public class Duhamel {
 		// Compute A(t_0) and B(t_0) assuming A(t_-1)=B(t_-1)=0
 		double a_ti_1 = 0;
 		double b_ti_1 = 0;
-		
+
 		// and than add this response record to responses
 		Response r0 = new Response(forces.get(0).getT(), forces.get(0).getP(),
-				0.0, 0.0, forces.get(0).getP() / m);
+				0.0, 0.0, forces.get(0).getP() / m, 0.0);
 		responses.add(r0);
 
 		// While there is force record
@@ -66,7 +77,6 @@ public class Duhamel {
 		// Compute u(t_i)
 		// Compute u'(t_i)
 		// Compute u"(t_i)
-		// TODO this loop must be corrected
 		for (int i = 1; i < forces.size(); i++) {
 			InputForce fi = forces.get(i);
 			InputForce fi_1 = forces.get(i - 1);
@@ -76,11 +86,12 @@ public class Duhamel {
 			double pi = fi.getP();
 			double pi_1 = fi_1.getP();
 			System.out.println("Pi = " + pi + " Pi_1 = " + pi_1);
-			double i1 = int1(ti)-int1(ti_1);
+			double i1 = int1(ti) - int1(ti_1);
 			double i2 = int2(ti) - int2(ti_1);
-			double i3 = int3(ti)-int3(ti_1);
-			double i4 = int4(ti)- int4(ti_1);
-			System.out.println("i1= " + i1 + " i2 = " + i2 + "i3 = " + i3 + " i4 = " + i4);
+			double i3 = int3(ti) - int3(ti_1);
+			double i4 = int4(ti) - int4(ti_1);
+			System.out.println("i1= " + i1 + " i2 = " + i2 + "i3 = " + i3
+					+ " i4 = " + i4);
 			System.out.println("Dp/Dt = " + (pi - pi_1) / (ti - ti_1));
 			double at = a_ti_1 + (pi_1 - ti_1 * ((pi - pi_1) / (ti - ti_1)))
 					* i1 + ((pi - pi_1) / (ti - ti_1)) * i4;
@@ -89,19 +100,21 @@ public class Duhamel {
 
 			double c = Math.exp(-kesi * omega * ti) / (m * omega_D);
 			double cp = -kesi * omega * c;
-			double cpp = -kesi * omega * cp;
 			double d = at * Math.sin(omega_D * ti) - bt
 					* Math.cos(omega_D * ti);
 			double dp = omega_D * at * Math.cos(omega_D * ti) + omega_D * bt
 					* Math.sin(omega_D * ti);
-			double dpp = -Math.pow(omega_D, 2) * at * Math.sin(omega_D * ti)
-					+ Math.pow(omega_D, 2) * bt * Math.cos(omega_D * ti);
 
 			double u = c * d;
 			double v = cp * d + c * dp;
-			double a = cpp * d + 2 * cp * dp + c * dpp;
+			double a = (pi - dampC * v - k * u) / m;
 
-			Response r = new Response(ti, pi, u, v, a);
+			double vSup = Math
+					.sqrt(Math.pow(u * k, 2) + Math.pow(v * dampC, 2));
+
+			compareMaxValues(u, v, a, vSup);
+
+			Response r = new Response(ti, pi, u, v, a, vSup);
 			responses.add(r);
 
 			a_ti_1 = at;
@@ -115,11 +128,12 @@ public class Duhamel {
 		double v0 = responses.get(responses.size() - 1).getV();
 		double tn = responses.get(responses.size() - 1).getT();
 
-		double t = tn;
+		double tau = tn;
 
 		// Compute u, u', u" for free vibration until desired time
-		while (t < tMax) {
-			t += dt;
+		while (tau < tMax) {
+			tau += dt;
+			double t = tau - tn;
 			double e = Math.pow(Math.E, -kesi * omega * t);
 			double ep = -kesi * omega * e;
 			double epp = -kesi * omega * ep;
@@ -136,9 +150,32 @@ public class Duhamel {
 			double u = e * f;
 			double v = ep * f + e * fp;
 			double a = epp * f + 2 * ep * fp + e * fpp;
-			Response r = new Response(t, 0.0, u, v, a);
+
+			double vSup = Math
+					.sqrt(Math.pow(u * k, 2) + Math.pow(v * dampC, 2));
+
+			compareMaxValues(u, v, a, vSup);
+
+			Response r = new Response(tau, 0.0, u, v, a, vSup);
 			responses.add(r);
 		}
+	}
+
+	/**
+	 * @param u
+	 * @param v
+	 * @param a
+	 * @param vSup
+	 */
+	private void compareMaxValues(double u, double v, double a, double vSup) {
+		if (Math.abs(u) > Math.abs(uMax))
+			uMax = u;
+		if (Math.abs(v) > Math.abs(vMax))
+			vMax = v;
+		if (Math.abs(a) > Math.abs(aMax))
+			aMax = a;
+		if (Math.abs(vSup) > Math.abs(vSupMax))
+			vSupMax = vSup;
 	}
 
 	/**
@@ -213,7 +250,7 @@ public class Duhamel {
 	 * @return
 	 */
 	private double mult1(double t) {
-		return Math.exp( kesi * omega * t)
+		return Math.exp(kesi * omega * t)
 				/ (Math.pow(kesi * omega, 2) + Math.pow(omega_D, 2));
 	}
 
@@ -416,5 +453,65 @@ public class Duhamel {
 	 */
 	public void setGr(double gr) {
 		this.gr = gr;
+	}
+
+	/**
+	 * @return the uMax
+	 */
+	public double getuMax() {
+		return uMax;
+	}
+
+	/**
+	 * @param uMax
+	 *            the uMax to set
+	 */
+	public void setuMax(double uMax) {
+		this.uMax = uMax;
+	}
+
+	/**
+	 * @return the vMax
+	 */
+	public double getvMax() {
+		return vMax;
+	}
+
+	/**
+	 * @param vMax
+	 *            the vMax to set
+	 */
+	public void setvMax(double vMax) {
+		this.vMax = vMax;
+	}
+
+	/**
+	 * @return the aMax
+	 */
+	public double getaMax() {
+		return aMax;
+	}
+
+	/**
+	 * @param aMax
+	 *            the aMax to set
+	 */
+	public void setaMax(double aMax) {
+		this.aMax = aMax;
+	}
+
+	/**
+	 * @return the vSupMax
+	 */
+	public double getvSupMax() {
+		return vSupMax;
+	}
+
+	/**
+	 * @param vSupMax
+	 *            the vSupMax to set
+	 */
+	public void setvSupMax(double vSupMax) {
+		this.vSupMax = vSupMax;
 	}
 }

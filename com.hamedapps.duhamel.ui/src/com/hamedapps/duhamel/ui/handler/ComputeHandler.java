@@ -12,6 +12,7 @@ import com.hamedapps.duhamel.ui.part.DataPart;
 import com.hamedapps.duhamel.ui.part.DisplacementChartPart;
 import com.hamedapps.duhamel.ui.part.InputChartPart;
 import com.hamedapps.duhamel.ui.part.ResponseDataPart;
+import com.hamedapps.duhamel.ui.part.SupportReactionPart;
 import com.hamedapps.duhamel.ui.part.VelocityChartPart;
 
 public class ComputeHandler {
@@ -67,6 +68,11 @@ public class ComputeHandler {
 		AccelerationChartPart accelerationChartPart = (AccelerationChartPart) acceleration
 				.getObject();
 		accelerationChartPart.updateChart();
+		
+		MPart supportR = partService.findPart("com.hamedapps.duhamel.ui.part.supreactionpart");
+		partService.activate(supportR, false);
+		SupportReactionPart supportReactionPart = (SupportReactionPart) supportR.getObject();
+		supportReactionPart.updateChart();
 		
 		partService.bringToTop(response);
 	}
