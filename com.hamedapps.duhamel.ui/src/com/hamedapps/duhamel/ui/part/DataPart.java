@@ -1,6 +1,13 @@
  
 package com.hamedapps.duhamel.ui.part;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.StreamTokenizer;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 import javax.annotation.PostConstruct;
@@ -24,14 +31,18 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 
 import com.hamedapps.duhamel.Duhamel;
 import com.hamedapps.duhamel.InputForce;
+
 import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.wb.swt.ResourceManager;
 
 public class DataPart {
 	private Text textXi;
@@ -62,6 +73,9 @@ public class DataPart {
 	private Text textGr;
 	
 	@Inject
+	private Shell shell;
+	
+	@Inject
 	public DataPart() {
 		inputForces = new Vector<>();
 		duhamel = new Duhamel(inputForces, kesi, m, omega, omega_D);
@@ -82,18 +96,6 @@ public class DataPart {
 		lblXi.setText("xi: ");
 		
 		textXi = new Text(mainComposite, SWT.BORDER);
-		textXi.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				updateXi();
-			}
-		});
-		textXi.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusLost(FocusEvent e) {
-				updateXi();
-			}
-		});
 		textXi.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		Label lblK = new Label(mainComposite, SWT.NONE);
@@ -101,18 +103,6 @@ public class DataPart {
 		lblK.setText("k: ");
 		
 		textK = new Text(mainComposite, SWT.BORDER);
-		textK.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				updateK();
-			}
-		});
-		textK.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusLost(FocusEvent e) {
-				updateK();
-			}
-		});
 		textK.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		Label lblM = new Label(mainComposite, SWT.NONE);
@@ -120,12 +110,6 @@ public class DataPart {
 		lblM.setText("m: ");
 		
 		textM = new Text(mainComposite, SWT.BORDER);
-		textM.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusLost(FocusEvent e) {
-				updateM();
-			}
-		});
 		textM.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		btnInterpulateBetweenForce = new Button(mainComposite, SWT.CHECK);
@@ -137,12 +121,6 @@ public class DataPart {
 		lblTimeStepdt.setText("Time Step (dt) : ");
 		
 		textDt = new Text(mainComposite, SWT.BORDER);
-		textDt.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusLost(FocusEvent e) {
-				updateDt();
-			}
-		});
 		textDt.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		Label lblNewLabel = new Label(mainComposite, SWT.SEPARATOR | SWT.HORIZONTAL);
@@ -196,32 +174,67 @@ public class DataPart {
 		
 		Label lblForceRecords = new Label(mainComposite, SWT.NONE);
 		lblForceRecords.setText("Force Records : ");
+		new Label(mainComposite, SWT.NONE);
 		
-		Button btnAdd = new Button(mainComposite, SWT.NONE);
+//		Button btnAdd = new Button(mainComposite, SWT.NONE);
+//		btnAdd.addSelectionListener(new SelectionAdapter() {
+//			@Override
+//			public void widgetSelected(SelectionEvent e) {
+//				addTimeForce();
+//			}
+//		});
+//		btnAdd.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+//		btnAdd.setText("Add");
+		
+		Composite composite_1 = new Composite(mainComposite, SWT.NONE);
+		composite_1.setLayout(new GridLayout(4, false));
+		composite_1.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 2, 1));
+		
+		Button btnAdd = new Button(composite_1, SWT.NONE);
+		btnAdd.setToolTipText("Add new record");
+		btnAdd.setImage(ResourceManager.getPluginImage("com.hamedapps.duhamel.ui", "icons/list-add.png"));
 		btnAdd.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				addTimeForce();
 			}
 		});
-		btnAdd.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		btnAdd.setText("Add");
-		
-		Composite composite_1 = new Composite(mainComposite, SWT.NONE);
-		composite_1.setLayout(new FillLayout(SWT.HORIZONTAL));
-		composite_1.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 2, 1));
-		
-		Button btnAdd_1 = new Button(composite_1, SWT.NONE);
-		btnAdd_1.setText("Add");
 		
 		Button btnRemove = new Button(composite_1, SWT.NONE);
-		btnRemove.setText("Remove");
+		btnRemove.setToolTipText("Remove selected record");
+		btnRemove.setImage(ResourceManager.getPluginImage("com.hamedapps.duhamel.ui", "icons/list-remove.png"));
+		btnRemove.addSelectionListener(new SelectionAdapter() {
+			/* (non-Javadoc)
+			 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+			 */
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				removeSelectedForceRecord();
+			}
+		});
 		
 		Button btnEdit = new Button(composite_1, SWT.NONE);
-		btnEdit.setText("Edit ...");
+		btnEdit.setToolTipText("Edit selected record");
+		btnEdit.setImage(ResourceManager.getPluginImage("com.hamedapps.duhamel.ui", "icons/document-edit.png"));
+		btnEdit.addSelectionListener(new SelectionAdapter() {
+			/* (non-Javadoc)
+			 * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+			 */
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				editSelectedForceRecord();
+			}
+		});
 		
 		Button btnImport = new Button(composite_1, SWT.NONE);
-		btnImport.setText("Import ...");
+		btnImport.setImage(ResourceManager.getPluginImage("com.hamedapps.duhamel.ui", "icons/document-import.png"));
+		btnImport.setToolTipText("Import from file");
+		btnImport.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				importForceRecords();
+			}
+		});
 		
 		ScrolledComposite scrolledComposite = new ScrolledComposite(mainComposite, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		scrolledComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
@@ -278,6 +291,65 @@ public class DataPart {
 //		application.getContext().set("inputForces", inputForces);
 		application.getContext().set("duhamel", duhamel);
 		
+	}
+
+	/**
+	 * 
+	 */
+	protected void editSelectedForceRecord() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/**
+	 * 
+	 */
+	protected void removeSelectedForceRecord() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/**
+	 * 
+	 */
+	protected void importForceRecords() {
+		FileDialog fileDialog = new FileDialog(shell, SWT.OPEN);
+		String path = fileDialog.open();
+		List<Double> input = new ArrayList<>();
+		
+		if(path != null) {
+			try {
+				StreamTokenizer data = new StreamTokenizer(new BufferedReader(new InputStreamReader(new FileInputStream(path))));
+				
+				while(data.nextToken() != StreamTokenizer.TT_EOF) {
+					double d = (double) data.nval;
+					input.add(d);
+				}
+				
+				Vector<InputForce> inputForces = new Vector<>();
+				double t = 0.0;
+				double p = 0.0;
+				for (int i = 0; i < input.size(); i++) {
+					double x = input.get(i);
+					if( (i%2) == 0 ) {
+						t = x;
+					} else {
+						p = x;
+						inputForces.add(new InputForce(t, p));
+					}
+				}
+				
+				for (InputForce inputForce : inputForces) {
+					System.out.println("t = " + inputForce.getT() + " p = " + inputForce.getP());
+				}
+				
+				this.inputForces = inputForces;
+				tableViewer.setInput(inputForces);
+				tableViewer.refresh();
+			} catch(IOException ioex) {
+				System.out.println(ioex.getMessage());
+			}
+		}
 	}
 
 	/**
@@ -434,5 +506,21 @@ public class DataPart {
 	 */
 	private void updateInerpolate() {
 		duhamel.setInterpolate(btnInterpulateBetweenForce.getSelection());
+	}
+
+	/**
+	 * 
+	 */
+	public void clearFields() {
+		textXi.setText("");
+		textK.setText("");
+		textM.setText("");
+		textDt.setText("");
+		textGr.setText("");
+		textTmax.setText("");
+		textTime.setText("");
+		textForce.setText("");
+		inputForces.clear();
+		
 	}
 }
