@@ -82,22 +82,16 @@ public class Duhamel {
 			InputForce fi_1 = forces.get(i - 1);
 			double ti = fi.getT();
 			double ti_1 = fi_1.getT();
-			System.out.println("ti = " + ti + " ti_1 = " + ti_1);
 			double pi = fi.getP();
 			double pi_1 = fi_1.getP();
-			System.out.println("Pi = " + pi + " Pi_1 = " + pi_1);
 			double i1 = int1(ti) - int1(ti_1);
 			double i2 = int2(ti) - int2(ti_1);
 			double i3 = int3(ti) - int3(ti_1);
 			double i4 = int4(ti) - int4(ti_1);
-			System.out.println("i1= " + i1 + " i2 = " + i2 + "i3 = " + i3
-					+ " i4 = " + i4);
-			System.out.println("Dp/Dt = " + (pi - pi_1) / (ti - ti_1));
 			double at = a_ti_1 + (pi_1 - ti_1 * ((pi - pi_1) / (ti - ti_1)))
 					* i1 + ((pi - pi_1) / (ti - ti_1)) * i4;
 			double bt = b_ti_1 + (pi_1 - ti_1 * ((pi - pi_1) / (ti - ti_1)))
 					* i2 + ((pi - pi_1) / (ti - ti_1)) * i3;
-
 			double c = Math.exp(-kesi * omega * ti) / (m * omega_D);
 			double cp = -kesi * omega * c;
 			double d = at * Math.sin(omega_D * ti) - bt
@@ -189,8 +183,6 @@ public class Duhamel {
 
 	/**
 	 * @param t_0
-	 * @param i1_i_1
-	 * @param i2_i_1
 	 * @return
 	 */
 	private double int4(double t) {
@@ -199,8 +191,6 @@ public class Duhamel {
 
 	/**
 	 * @param t_0
-	 * @param i1_i_1
-	 * @param i2_i_1
 	 * @return
 	 */
 	private double int3(double t) {
@@ -226,7 +216,7 @@ public class Duhamel {
 	}
 
 	/**
-	 * @param t_0
+	 * @param t
 	 * @return
 	 */
 	private double int2(double t) {
@@ -236,7 +226,7 @@ public class Duhamel {
 	}
 
 	/**
-	 * @param d
+	 * @param t
 	 * @return
 	 */
 	private double int1(double t) {

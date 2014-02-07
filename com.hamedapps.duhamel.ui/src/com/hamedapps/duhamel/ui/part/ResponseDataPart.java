@@ -206,7 +206,5 @@ public class ResponseDataPart {
 		
 		tableViewer.setInput(duhamel.getResponses());
 		tableViewer.refresh();
-	}
-	
-	
+	}	
 }

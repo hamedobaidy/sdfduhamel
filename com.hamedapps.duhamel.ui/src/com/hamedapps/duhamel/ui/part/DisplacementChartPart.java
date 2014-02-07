@@ -41,7 +41,7 @@ public class DisplacementChartPart {
 		chart = new Chart(scrolledComposite, SWT.NONE);
 		scrolledComposite.setContent(chart);
 		scrolledComposite.setMinSize(chart.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-		chart.getTitle().setText("Displacement Chart");
+		chart.getTitle().setText("Displacement Response Graph");
 		
 		updateChart();
 	}
@@ -63,7 +63,7 @@ public class DisplacementChartPart {
 		series.setXSeries(ts);
 		IAxisSet axisSet = chart.getAxisSet();
 		axisSet.getXAxis(0).getTitle().setText("t (sec)");
-		axisSet.getYAxis(0).getTitle().setText("u");
+		axisSet.getYAxis(0).getTitle().setText("Displacement- u");
 		series.setSymbolType(PlotSymbolType.NONE);
 		axisSet.adjustRange();
 		chart.redraw();
@@ -76,9 +76,5 @@ public class DisplacementChartPart {
 		duhamel = (Duhamel) context.get("duhamel");
 		if(duhamel!=null) 
 			refreshChart();
-	}
-	
-	
-	
-	
+	}	
 }

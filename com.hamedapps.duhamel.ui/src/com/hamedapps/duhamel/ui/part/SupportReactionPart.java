@@ -70,10 +70,10 @@ public class SupportReactionPart {
 		series.setYSeries(fs);
 		series.setXSeries(ts);
 		IAxisSet axisSet = chart.getAxisSet();
+		axisSet.getXAxis(0).getTitle().setText("t (sec)");
+		axisSet.getYAxis(0).getTitle().setText("Sup. V");
 		series.setSymbolType(PlotSymbolType.NONE);
 		axisSet.adjustRange();
 		chart.redraw();
-	}
-	
-	
+	}	
 }

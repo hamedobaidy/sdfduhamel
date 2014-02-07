@@ -40,7 +40,7 @@ public class InputChartPart {
 		chart = new Chart(scrolledComposite, SWT.NONE);
 		scrolledComposite.setContent(chart);
 		scrolledComposite.setMinSize(chart.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-		chart.getTitle().setText("Inpute Forces");
+		chart.getTitle().setText("Inpute Forces Graph");
 		updateChart();
 	}
 
@@ -70,12 +70,10 @@ public class InputChartPart {
 		series.setYSeries(fs);
 		series.setXSeries(ts);
 		IAxisSet axisSet = chart.getAxisSet();
+		axisSet.getXAxis(0).getTitle().setText("t (sec)");
+		axisSet.getYAxis(0).getTitle().setText("Force- P");
 		series.setSymbolType(PlotSymbolType.NONE);
 		axisSet.adjustRange();
 		chart.redraw();
-	}
-	
-	
-	
-	
+	}	
 }

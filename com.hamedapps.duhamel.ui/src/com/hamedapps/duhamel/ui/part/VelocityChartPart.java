@@ -40,7 +40,7 @@ public class VelocityChartPart {
 		chart = new Chart(scrolledComposite, SWT.NONE);
 		scrolledComposite.setContent(chart);
 		scrolledComposite.setMinSize(chart.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-		chart.getTitle().setText("Velocity Response Chart");
+		chart.getTitle().setText("Velocity Response Graph");
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class VelocityChartPart {
 		series.setXSeries(ts);
 		IAxisSet axisSet = chart.getAxisSet();
 		axisSet.getXAxis(0).getTitle().setText("t (sec)");
-		axisSet.getYAxis(0).getTitle().setText("v");
+		axisSet.getYAxis(0).getTitle().setText("Velocity");
 		series.setSymbolType(PlotSymbolType.NONE);
 		axisSet.adjustRange();
 		chart.redraw();
@@ -73,9 +73,5 @@ public class VelocityChartPart {
 		duhamel = (Duhamel) context.get("duhamel");
 		if(duhamel!=null) 
 			refreshChart();
-	}
-	
-	
-	
-	
+	}	
 }

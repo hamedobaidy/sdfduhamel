@@ -40,7 +40,7 @@ public class AccelerationChartPart {
 		chart = new Chart(scrolledComposite, SWT.NONE);
 		scrolledComposite.setContent(chart);
 		scrolledComposite.setMinSize(chart.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-		//TODO Your code here
+		chart.getTitle().setText("Acceleration Response Graph");
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class AccelerationChartPart {
 		series.setXSeries(ts);
 		IAxisSet axisSet = chart.getAxisSet();
 		axisSet.getXAxis(0).getTitle().setText("t (sec)");
-		axisSet.getYAxis(0).getTitle().setText("a");
+		axisSet.getYAxis(0).getTitle().setText("Acceleration");
 		series.setSymbolType(PlotSymbolType.NONE);
 		axisSet.adjustRange();
 		chart.redraw();
@@ -73,9 +73,5 @@ public class AccelerationChartPart {
 		duhamel = (Duhamel) context.get("duhamel");
 		if(duhamel!=null) 
 			refreshChart();
-	}
-	
-	
-	
-	
+	}	
 }
