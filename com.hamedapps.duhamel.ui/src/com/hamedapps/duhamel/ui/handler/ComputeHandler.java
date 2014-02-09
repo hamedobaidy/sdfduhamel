@@ -27,11 +27,7 @@ public class ComputeHandler {
 
 		
 		Duhamel duhamel = (Duhamel) context.get("duhamel");
-		System.out.println("Duhamel xi= " + duhamel.getKesi() + "\n" 
-				+ "k = " + duhamel.getK() + "\n"
-				+ "omega = " + duhamel.getOmega() + "\n"
-				+ "omega_D  = " + duhamel.getOmega_D() + "\n"
-				+ "m = " + duhamel.getM());
+		
 		duhamel.compute();
 		
 
